@@ -1,32 +1,34 @@
-[
-  {
-    "slug": "the-good-one",
-    "title": "The good one in the room",
-    "topic": "Good kids",
-    "date": "2026-10-01",
-    "read": "5 min read",
-    "cover": "",
-    "excerpt": "Being easy to be around was a skill you learned early. It worked. So why does it feel so tight now?",
-    "body": "Most of the people I work with were the easy child. The one who read the room, didn't make a fuss, brought home the grades. Nobody had to worry about them.\n\nThat skill doesn't disappear when we grow up. It becomes a career, a relationship style, a way of being liked. And for a long time it works beautifully.\n\nUntil one day something in you gets quietly fed up. Not with anyone else, but with the version of you that is always fine.\n\nThat fed-up voice isn't a problem to fix. It's a part of you that has been waiting a very long time to be invited in."
-  },
-  {
-    "slug": "meeting-a-part",
-    "title": "What it feels like to meet a part",
-    "topic": "Parts work",
-    "date": "2026-09-01",
-    "read": "4 min read",
-    "cover": "",
-    "excerpt": "It's less mystical than it sounds. Often it starts with a simple question: who in you is saying that?",
-    "body": "When people first hear about parts work, they imagine something dramatic. In practice it's mostly curiosity.\n\nYou notice a reaction, say the urge to apologise for taking up time, and instead of acting on it or pushing it away, you turn towards it. What does it want? What is it afraid would happen?\n\nAlmost always, the part turns out to be trying to help. It just learned its job a long time ago and never got an update.\n\nSomething softens when a part feels heard. That softening is where change actually begins."
-  },
-  {
-    "slug": "too-much",
-    "title": "On being told you were too much",
-    "topic": "Edges",
-    "date": "2026-08-01",
-    "read": "6 min read",
-    "cover": "",
-    "excerpt": "Too loud, too intense, too strange. What if those were never flaws, just parts of you without a place to go?",
-    "body": "Many of us carry a sentence from long ago: you're too much. Sometimes it was said out loud. Sometimes it was just a look.\n\nSo we made ourselves smaller and tidier, and we got very good at it.\n\nIn my own life, it was spaces at the edges of what's considered normal that gave those parts somewhere to land. Places where nobody flinched.\n\nYou don't have to blow your life up to give your edges more room. Often it starts with one honest conversation where nothing needs to be hidden."
-  }
-]
+{
+  "posts": [
+    {
+      "slug": "the-good-one",
+      "title": "The good one in the room",
+      "topic": "Good kids",
+      "date": "2026-10-01",
+      "read": "5 min read",
+      "cover": "",
+      "excerpt": "Being easy to be around was a skill you learned early. It worked. So why does it feel so tight now?",
+      "body": "Most of the people I work with were the easy child. The one who read the room, didn't make a fuss, brought home the grades. Nobody had to worry about them.\n\nThat skill doesn't disappear when we grow up. It becomes a career, a relationship style, a way of being liked. And for a long time it works beautifully.\n\nUntil one day something in you gets quietly fed up. Not with anyone else, but with the version of you that is always fine.\n\nThat fed-up voice isn't a problem to fix. It's a part of you that has been waiting a very long time to be invited in."
+    },
+    {
+      "slug": "meeting-a-part",
+      "title": "What it feels like to meet a part",
+      "topic": "Parts work",
+      "date": "2026-09-01",
+      "read": "4 min read",
+      "cover": "",
+      "excerpt": "It's less mystical than it sounds. Often it starts with a simple question: who in you is saying that?",
+      "body": "When people first hear about parts work, they imagine something dramatic. In practice it's mostly curiosity.\n\nYou notice a reaction, say the urge to apologise for taking up time, and instead of acting on it or pushing it away, you turn towards it. What does it want? What is it afraid would happen?\n\nAlmost always, the part turns out to be trying to help. It just learned its job a long time ago and never got an update.\n\nSomething softens when a part feels heard. That softening is where change actually begins."
+    },
+    {
+      "slug": "too-much",
+      "title": "On being told you were too much",
+      "topic": "Edges",
+      "date": "2026-08-01",
+      "read": "6 min read",
+      "cover": "",
+      "excerpt": "Too loud, too intense, too strange. What if those were never flaws, just parts of you without a place to go?",
+      "body": "Many of us carry a sentence from long ago: you're too much. Sometimes it was said out loud. Sometimes it was just a look.\n\nSo we made ourselves smaller and tidier, and we got very good at it.\n\nIn my own life, it was spaces at the edges of what's considered normal that gave those parts somewhere to land. Places where nobody flinched.\n\nYou don't have to blow your life up to give your edges more room. Often it starts with one honest conversation where nothing needs to be hidden."
+    }
+  ]
+}
