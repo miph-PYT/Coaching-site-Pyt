@@ -1,0 +1,26 @@
+media:
+  input: images
+  output: images
+content:
+  - name: posts
+    label: Blog posts
+    type: file
+    path: posts.json
+    format: json
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{title}"
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: slug, label: "Web address (short, lowercase, dashes, e.g. my-new-post)", type: string, required: true }
+      - name: topic
+        label: Topic
+        type: select
+        options:
+          values: [Good kids, Parts work, Edges]
+      - { name: date, label: Date, type: date }
+      - { name: read, label: "Reading time (e.g. 4 min read)", type: string }
+      - { name: cover, label: Cover photo, type: image }
+      - { name: excerpt, label: Short intro, type: text }
+      - { name: body, label: "Text (leave an empty line between paragraphs)", type: text }
