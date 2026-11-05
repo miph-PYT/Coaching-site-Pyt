@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Session reflection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Usage — one page, three forms:
+   *   /reflect/?s=intro     after the intake session (also the default with no ?s=)
+   *   /reflect/?s=session   after sessions 1–4 of the arc
+   *   /reflect/?s=final     after the last session
+   * Optional extras: &n=Anna (prefills name)  &k=2 (prefills session number)  &lang=da
+   */
+  :root {
+    --cream: #f4e9d7;
+    --paper: #fbf5ea;
+    --ink: #1f1e1c;
+    --muted: #6b6359;
+    --line: #dccdb5;
+    --accent: #c67138;
+    --accent-ink: #fff;
+    --error: #a3361f;
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --cream: #1f1e1c; --paper: #2a2826; --ink: #f4e9d7; --muted: #b3a895;
+      --line: #45403a; --accent: #d9874f; --accent-ink: #1f1e1c; --error: #e57a5f;
+      color-scheme: dark;
+    }
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font: 400 1.0625rem/1.6 Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 36rem; margin: 0 auto; padding: 1.25rem 1.25rem 4rem; }
+
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3.5rem; }
+  .home { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .home:hover { color: var(--accent); }
+  .lang { display: flex; gap: .25rem; }
+  .lang button {
+    font: inherit; font-size: .875rem; background: none; border: 0; color: var(--muted);
+    padding: .25rem .5rem; border-radius: 4px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+
+  h1 {
+    font: 500 clamp(2.25rem, 7vw, 3rem)/1.1 Fraunces, Georgia, serif;
+    letter-spacing: -.01em; margin: 0 0 1rem;
+  }
+  .lead { color: var(--muted); margin: 0 0 3rem; max-width: 32rem; }
+
+  .q { margin: 0 0 2.75rem; border: 0; padding: 0; min-width: 0; }
+  .q > label, .q > legend {
+    display: block; padding: 0; margin: 0 0 .75rem;
+    font: 400 1.3rem/1.35 Fraunces, Georgia, serif;
+  }
+  .opt { font: 400 .875rem Figtree, system-ui, sans-serif; color: var(--muted); margin-left: .4rem; }
+  .hint { display: block; font-size: .9375rem; color: var(--muted); margin: -.4rem 0 .75rem; }
+
+  input[type="text"], textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--paper);
+    border: 1px solid var(--line); border-radius: 6px; padding: .75rem .875rem;
+  }
+  textarea { min-height: 7rem; resize: vertical; line-height: 1.55; }
+  input.word { font: 400 1.5rem Fraunces, Georgia, serif; padding: .6rem .875rem; }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+  /* Choices */
+  .choices { display: grid; gap: .5rem; }
+  .choices.row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice span {
+    display: block; padding: .7rem .95rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .choices.row .choice span { min-width: 3rem; text-align: center; }
+  .choice input:checked + span { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--paper)); }
+  .choice input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Compass scale — the one expressive element */
+  .compass { position: relative; padding-top: .25rem; }
+  .compass .track {
+    position: absolute; left: 1.1rem; right: 1.1rem; top: calc(.25rem + 1.1rem); height: 2px;
+    background: var(--line); border-radius: 2px;
+  }
+  .compass .fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent);
+    border-radius: 2px; transition: width .35s ease;
+  }
+  .compass .stops { position: relative; display: flex; justify-content: space-between; }
+  .compass input { position: absolute; opacity: 0; pointer-events: none; }
+  .compass .stop {
+    display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%;
+    background: var(--cream); border: 2px solid var(--line); cursor: pointer;
+    font-size: .875rem; font-weight: 600; color: var(--muted);
+    transition: background .2s, border-color .2s, color .2s, transform .2s;
+  }
+  .compass .stop.passed { border-color: var(--accent); color: var(--accent); }
+  .compass input:checked + .stop { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: scale(1.12); }
+  .compass input:focus-visible + .stop { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .compass .ends { display: flex; justify-content: space-between; font-size: .875rem; color: var(--muted); margin-top: .6rem; }
+  @media (max-width: 26rem) {
+    .compass .stop { width: 1.8rem; height: 1.8rem; font-size: .8rem; }
+    .compass .track { left: .9rem; right: .9rem; top: calc(.25rem + .9rem); }
+  }
+
+  .send {
+    font: 600 1rem Figtree, system-ui, sans-serif; color: var(--accent-ink); background: var(--accent);
+    border: 0; border-radius: 6px; padding: .95rem 1.6rem; cursor: pointer;
+  }
+  .send:hover { filter: brightness(1.06); }
+  .send:disabled { opacity: .6; cursor: default; }
+  .send:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .status { margin-top: 1rem; min-height: 1.5rem; }
+  .status.err { color: var(--error); }
+  .sign { margin-top: 3rem; color: var(--muted); font-family: Fraunces, Georgia, serif; font-size: 1.15rem; }
+
+  .thanks h1 { margin-top: 2rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="home" href="https://www.parts-work.dk/">parts-work.dk</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="da" aria-pressed="false">DA</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <form id="form" novalidate>
+      <h1 id="title"></h1>
+      <p class="lead" id="lead"></p>
+      <div id="questions"></div>
+      <button class="send" type="submit" id="send"></button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <p class="sign">Philipp</p>
+    </form>
+  </main>
+</div>
+
+<script>
+/* Paste the Web app URL from your Apps Script deployment here */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyseEB5n9U9iLjFOxLufEbnXUmlWAebuCLLvsB-w3ukUxpG-D-HxTk3TVpnM6tNAm_jZw/exec';
+
+const UI = {
+  en: {
+    lead: 'A few minutes of reflection, while it’s still fresh. Only I read your answers, and you can skip anything you’d rather leave.',
+    optional: 'optional', send: 'Send reflection', sending: 'Sending…',
+    error: 'Your reflection didn’t send. Check your connection and try again.',
+    thanksTitle: 'Thank you.', thanksText: 'Your reflection is with me. I’ll read it before we meet again.',
+    thanksFinal: 'Your reflection is with me. Thank you for doing this work with me.',
+    far: 'far away', near: 'right there'
+  },
+  da: {
+    lead: 'Et par minutters refleksion, mens det stadig er frisk. Det er kun mig, der læser dine svar, og du kan springe over, hvad du hellere vil lade være.',
+    optional: 'valgfrit', send: 'Send refleksion', sending: 'Sender…',
+    error: 'Din refleksion blev ikke sendt. Tjek din forbindelse, og prøv igen.',
+    thanksTitle: 'Tak.', thanksText: 'Din refleksion er nået frem til mig. Jeg læser den, inden vi ses igen.',
+    thanksFinal: 'Din refleksion er nået frem til mig. Tak, fordi du har gjort dette arbejde sammen med mig.',
+    far: 'langt væk', near: 'helt fremme'
+  }
+};
+
+/* Question ids double as Google Sheet column names — keep them stable once live. */
+const NAME = { id: 'name', type: 'name', opt: true, en: 'Your name', da: 'Dit navn' };
+
+const FORMS = {
+  intro: {
+    title: { en: 'After our first session', da: 'Efter vores første session' },
+    questions: [
+      NAME,
+      { id: 'word', type: 'word', en: 'In one word or phrase: how are you leaving our first session?', da: 'Med et ord eller en kort sætning: Hvordan går du fra vores første session?' },
+      { id: 'stood_out', type: 'long', en: 'What stood out to you from our conversation?', da: 'Hvad gjorde mest indtryk på dig i vores samtale?' },
+      { id: 'way_of_working', type: 'long', en: 'How did it feel to work this way, with parts, the body, and slowing down?', da: 'Hvordan føltes det at arbejde på denne måde, med dele, kroppen og et langsommere tempo?' },
+      { id: 'not_right', type: 'long', opt: true, en: 'Was anything unclear, uncomfortable, or not quite right?', da: 'Var der noget, der var uklart, ubehageligt eller ikke helt rigtigt?',
+        hint: { en: 'Honest answers help me most.', da: 'Ærlige svar hjælper mig mest.' } },
+      { id: 'continuing', type: 'choice', en: 'Where are you with continuing?', da: 'Hvor er du i forhold til at fortsætte?',
+        options: [
+          { en: 'I’d like to start the five-session arc', da: 'Jeg vil gerne starte forløbet med fem sessioner' },
+          { en: 'I want to think it over', da: 'Jeg vil gerne tænke over det' },
+          { en: 'I have questions first', da: 'Jeg har nogle spørgsmål først' },
+          { en: 'It’s not for me right now', da: 'Det er ikke noget for mig lige nu' }
+        ] },
+      { id: 'anything_else', type: 'long', opt: true, en: 'Anything else you’d like me to know?', da: 'Er der andet, du gerne vil have, at jeg ved?' }
+    ]
+  },
+  session: {
+    title: { en: 'After today’s session', da: 'Efter dagens session' },
+    questions: [
+      NAME,
+      { id: 'session_no', type: 'row', param: 'k', en: 'Which session was this?', da: 'Hvilken session var det?',
+        options: ['1', '2', '3', '4'].map(n => ({ en: n, da: n })) },
+      { id: 'word', type: 'word', en: 'In one word or phrase: how are you leaving today?', da: 'Med et ord eller en kort sætning: Hvordan går du herfra i dag?' },
+      { id: 'landed', type: 'long', en: 'What landed, shifted, or surprised you?', da: 'Hvad ramte dig, flyttede sig eller overraskede dig?' },
+      { id: 'parts', type: 'long', opt: true, en: 'Was there a part of you that felt especially seen, or one that felt left out?', da: 'Var der en del af dig, der følte sig særligt set, eller en, der blev overset?' },
+      { id: 'compass', type: 'scale', en: 'How close do you feel to what you came to coaching for?', da: 'Hvor tæt føler du dig på det, du kom til coaching for?' },
+      { id: 'more_less', type: 'long', opt: true, en: 'Anything you’d want more or less of next time?', da: 'Er der noget, du gerne vil have mere eller mindre af næste gang?' },
+      { id: 'carry', type: 'long', opt: true, en: 'Anything you’d like to carry into the days before we meet again?', da: 'Er der noget, du gerne vil tage med dig, indtil vi ses igen?' }
+    ]
+  },
+  final: {
+    title: { en: 'Looking back', da: 'Et tilbageblik' },
+    questions: [
+      NAME,
+      { id: 'word', type: 'word', en: 'In one word or phrase: how are you leaving this process?', da: 'Med et ord eller en kort sætning: Hvordan går du fra dette forløb?' },
+      { id: 'changed', type: 'long', en: 'Looking back over our sessions, what has changed for you?', da: 'Når du ser tilbage på vores sessioner, hvad har så ændret sig for dig?' },
+      { id: 'compass', type: 'scale', en: 'How close do you feel now to what you came to coaching for?', da: 'Hvor tæt føler du dig nu på det, du kom til coaching for?' },
+      { id: 'helped', type: 'long', en: 'What helped most?', da: 'Hvad hjalp mest?' },
+      { id: 'different', type: 'long', opt: true, en: 'What would you have wanted to be different?', da: 'Hvad ville du gerne have haft anderledes?' },
+      { id: 'next', type: 'choice', en: 'What feels right from here?', da: 'Hvad føles rigtigt herfra?',
+        options: [
+          { en: 'Another round of sessions', da: 'Et nyt forløb' },
+          { en: 'Occasional check-ins', da: 'Opfølgende sessioner engang imellem' },
+          { en: 'Taking it from here on my own', da: 'At gå videre på egen hånd' },
+          { en: 'Not sure yet', da: 'Ved ikke endnu' }
+        ] },
+      { id: 'testimonial', type: 'long', opt: true, en: 'If a friend asked you about this coaching, what would you tell them?', da: 'Hvis en ven spurgte dig om dette coachingforløb, hvad ville du så fortælle?' },
+      { id: 'share_permission', type: 'choice', opt: true, en: 'May I share what you wrote above on my website?', da: 'Må jeg dele det, du skrev ovenfor, på min hjemmeside?',
+        options: [
+          { en: 'Yes, with my first name', da: 'Ja, med mit fornavn' },
+          { en: 'Yes, anonymously', da: 'Ja, anonymt' },
+          { en: 'No, keep it private', da: 'Nej, hold det privat' }
+        ] }
+    ]
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const kind = FORMS[params.get('s')] ? params.get('s') : 'intro';
+const form = FORMS[kind];
+let lang = params.get('lang') === 'da' ? 'da'
+  : params.get('lang') === 'en' ? 'en'
+  : (navigator.language || '').toLowerCase().startsWith('da') ? 'da' : 'en';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function optTag(q) { return q.opt ? `<span class="opt">${UI[lang].optional}</span>` : ''; }
+
+function renderQuestion(q) {
+  const label = esc(q[lang]);
+  const hint = q.hint ? `<span class="hint">${esc(q.hint[lang])}</span>` : '';
+  const fid = 'f_' + q.id;
+  switch (q.type) {
+    case 'name':
+      return `<div class="q"><label for="${fid}">${label}${optTag(q)}</label>
+        <input type="text" id="${fid}" name="${q.id}" autocomplete="given-name"></div>`;
+    case 'word':
+      return `<div class="q"><label for="${fid}">${label}${optTag(q)}</label>${hint}
+        <input type="text" class="word" id="${fid}" name="${q.id}" maxlength="80" autocomplete="off"></div>`;
+    case 'long':
+      return `<div class="q"><label for="${fid}">${label}${optTag(q)}</label>${hint}
+        <textarea id="${fid}" name="${q.id}"></textarea></div>`;
+    case 'choice':
+    case 'row':
+      return `<fieldset class="q"><legend>${label}${optTag(q)}</legend>${hint}
+        <div class="choices${q.type === 'row' ? ' row' : ''}">${q.options.map(o =>
+          `<label class="choice"><input type="radio" name="${q.id}" value="${esc(o.en)}"><span>${esc(o[lang])}</span></label>`
+        ).join('')}</div></fieldset>`;
+    case 'scale': {
+      const stops = Array.from({ length: 10 }, (_, i) => i + 1).map(n =>
+        `<label><input type="radio" name="${q.id}" value="${n}"><span class="stop">${n}</span></label>`).join('');
+      return `<fieldset class="q"><legend>${label}${optTag(q)}</legend>${hint}
+        <div class="compass"><div class="track"><div class="fill"></div></div>
+        <div class="stops">${stops}</div>
+        <div class="ends"><span>1 = ${UI[lang].far}</span><span>10 = ${UI[lang].near}</span></div></div></fieldset>`;
+    }
+  }
+}
+
+function snapshot() {
+  const data = {};
+  new FormData($('form')).forEach((v, k) => { data[k] = v; });
+  return data;
+}
+
+function restore(data) {
+  for (const [k, v] of Object.entries(data)) {
+    const els = $('form').elements[k];
+    if (!els) continue;
+    if (els instanceof RadioNodeList) {
+      els.forEach(r => { r.checked = r.value === v; });
+    } else els.value = v;
+  }
+  document.querySelectorAll('.compass').forEach(updateCompass);
+}
+
+function updateCompass(c) {
+  const checked = c.querySelector('input:checked');
+  const val = checked ? +checked.value : 0;
+  c.querySelectorAll('.stop').forEach((s, i) => s.classList.toggle('passed', i + 1 < val));
+  c.querySelector('.fill').style.width = val ? ((val - 1) / 9 * 100) + '%' : '0';
+}
+
+function render(keep) {
+  const data = keep ? snapshot() : null;
+  document.documentElement.lang = lang;
+  document.title = form.title[lang];
+  $('title').textContent = form.title[lang];
+  $('lead').textContent = UI[lang].lead;
+  $('send').textContent = UI[lang].send;
+  $('questions').innerHTML = form.questions.map(renderQuestion).join('');
+  document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  document.querySelectorAll('.compass').forEach(c => c.addEventListener('change', () => updateCompass(c)));
+  if (data) restore(data);
+}
+
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.lang === lang) return;
+  lang = b.dataset.lang;
+  if ($('form')) render(true); else showThanks();
+}));
+
+function showThanks() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('main').innerHTML = `<section class="thanks"><h1>${UI[lang].thanksTitle}</h1>
+    <p class="lead">${kind === 'final' ? UI[lang].thanksFinal : UI[lang].thanksText}</p>
+    <p class="sign">Philipp</p></section>`;
+  $('main').querySelector('h1').setAttribute('tabindex', '-1');
+  $('main').querySelector('h1').focus();
+}
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = $('status'), send = $('send');
+  status.className = 'status'; status.textContent = '';
+  send.disabled = true; send.textContent = UI[lang].sending;
+
+  const body = new URLSearchParams();
+  body.set('form_type', kind);
+  body.set('language', lang);
+  for (const [k, v] of Object.entries(snapshot())) body.set(k, String(v).trim());
+
+  try {
+    if (!/^https:\/\//.test(ENDPOINT)) throw new Error('ENDPOINT not set');
+    await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body });
+    showThanks();
+  } catch (err) {
+    console.error(err);
+    status.className = 'status err'; status.textContent = UI[lang].error;
+    send.disabled = false; send.textContent = UI[lang].send;
+  }
+});
+
+/* First render, then prefill from the link */
+render(false);
+if (params.get('n')) $('f_name').value = params.get('n');
+const prefill = form.questions.find(q => q.param && params.get(q.param));
+if (prefill) restore({ [prefill.id]: params.get(prefill.param) });
+</script>
+</body>
+</html>
