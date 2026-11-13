@@ -109,13 +109,12 @@
   .foryou p { font-size: 1.2rem; margin-bottom: 1.6rem; }
 
   /* Parts-work explainer */
-  .explain p:last-child { font-family: var(--display); font-weight: 700; font-size: 1.3rem; color: var(--lilac); margin-bottom: 0; }
 
   /* How I work */
   .pull {
     font-family: var(--voice); font-style: italic; font-weight: 600;
     font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.3;
-    color: var(--lilac); max-width: 36ch; margin: 0 0 3.5rem;
+    color: var(--lilac); max-width: 36ch; margin: 1.8rem 0 0;
   }
   .journey { position: relative; margin-top: 2.5rem; padding-right: 2.5rem; }
   .journey-path { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
@@ -127,7 +126,7 @@
     width: 2.5rem; height: 2.5rem; border-radius: 50%;
     display: grid; place-items: center;
     background: var(--lilac); color: var(--ink);
-    font-family: var(--display); font-weight: 800;
+    font-family: var(--body); font-weight: 500;
     box-shadow: 0 0 0 6px var(--ground);
   }
   .steps p { color: var(--soft); font-size: 0.97rem; margin: 0; }
@@ -183,7 +182,7 @@
   .ticks li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--lilac); }
 
   .price-panel { background: var(--sunk); border-radius: 1.2rem; padding: 1.5rem; align-self: start; }
-  .price { font-family: var(--display); font-weight: 800; font-size: 1.9rem; color: var(--cyan); line-height: 1.1; margin: 0 0 0.3rem; }
+  .price { font-family: var(--body); font-weight: 500; letter-spacing: -0.01em; font-size: 1.9rem; color: var(--cyan); line-height: 1.1; margin: 0 0 0.3rem; }
   .price-note { color: var(--soft); font-size: 0.9rem; margin: 0 0 1.2rem; }
 
   .tiers-intro { color: var(--soft); max-width: var(--measure); margin: 3rem 0 1.6rem; }
@@ -196,7 +195,7 @@
   .tier-meta { color: var(--soft); font-size: 0.88rem; margin-bottom: 1.4rem; }
   .tier .ticks { margin: 1.3rem 0 1.8rem; }
   .tier .btn { margin-top: auto; text-align: center; }
-  .badge { position: absolute; top: -0.85rem; left: 1.6rem; background: var(--lilac); color: var(--ink); font-family: var(--display); font-weight: 800; font-size: 0.82rem; padding: 0.25rem 0.85rem; border-radius: 999px; }
+  .badge { position: absolute; top: -0.85rem; left: 1.6rem; background: var(--lilac); color: var(--ink); font-family: var(--body); font-weight: 500; font-size: 0.82rem; padding: 0.25rem 0.85rem; border-radius: 999px; }
 
   .reflect-note { color: var(--soft); font-size: 0.9rem; margin-top: 1.4rem; }
 
@@ -230,6 +229,7 @@
     .steps { grid-template-columns: 1fr; row-gap: 2.4rem; }
     .journey { padding-right: 0; }
     .steps li:not(.step-final) { padding-top: 0; padding-left: 3.6rem; }
+    .steps .step-final .marker { left: -0.15rem; }
     .row-offer summary { flex-wrap: wrap; }
     .row-text { flex-basis: calc(100% - 2.5rem); }
   }
@@ -238,6 +238,11 @@
     .btn { transition: none; }
   }
 
+
+  .foot-right { text-align: right; }
+  .foot-right p { margin: 0 0 0.4rem; }
+  .site nav a[aria-current="page"] { color: var(--lilac); }
+  @media (max-width: 760px) { .foot-right { text-align: left; } }
 </style>
 </head>
 <body>
@@ -246,12 +251,12 @@
   <div class="wrap">
     <a class="brand" href="#top">Philipp Mitterhofer</a>
     <nav aria-label="Main">
-      <a href="#who">For you</a>
-      <a href="#what-is">Parts-work</a>
+      <a href="parts-work.html">Parts-work</a>
       <a href="#offer">How I work</a>
       <a href="#story">Story</a>
       <a href="#work">Offers</a>
-      <a class="btn" href="#work">Book</a>
+      <a href="blog.html">Blog</a>
+      <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book</a>
     </nav>
   </div>
 </header>
@@ -275,7 +280,7 @@
     <h2>This is for you</h2>
     <div>
       <p>If you feel stuck, pulled in different directions, or at odds with yourself, this is for you. You may know exactly who you want to be, or you may not know yet. Either way, if part of you keeps getting in the way, this work can help.</p>
-      <a class="btn" href="https://cal.com/philippm/15min" target="_blank" rel="noopener">Book a free intro call</a>
+      <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book a free intro call</a>
     </div>
   </div>
 </section>
@@ -285,14 +290,13 @@
     <h2>What is parts-work?</h2>
     <p>I'm a parts-work coach. In simple terms, it is my job to help you resolve the conflicts and struggles inside you.</p>
     <p>It is those internal struggles that can take up a lot of energy and focus and can make life truly miserable. Just like when you are trying to finish a task with someone you're fighting with, all the air is sucked out. You might finish the project, sure, but it will most likely not be fun.</p>
-    <p>Resolving these can create space. Space that will allow you to breathe. Or play. Or work. Your choice.</p>
+    <p class="pull">When you are in conflict with yourself, it can feel like you are choking. When the internal fighting stops, space opens up again. Space to breathe. Or play. Or work. Your choice.</p>
+    <div class="actions"><a class="btn btn-quiet" href="parts-work.html">More about parts-work</a></div>
   </div>
 </section>
 
 <section id="offer" class="band">
   <div class="wrap">
-    <p class="pull">When you are in conflict with yourself it can feel like you are choking. But when the internal fighting stops, you can breathe again.</p>
-
     <h2>How I work</h2>
     <p class="narrow" style="color:var(--soft)">Each session moves through four stages, and each one builds on the one before. We understand a part, we listen to what it needs in the body, we stay with it fully, and only then does the space open up.</p>
 
@@ -356,15 +360,15 @@
   <div class="wrap">
     <div class="offers-head">
       <h2>What I offer</h2>
-      <p>Every path starts with a free 20-minute call. No pressure, no pitch. All my coaching draws on parts-work: getting to know the voices inside you, including the ones you've kept hidden.</p>
-      <a class="btn btn-quiet" href="#what-is">Discover what parts-work is</a>
+      <p>Every path starts with a free 20-minute call. No pressure, no pitch. All my coaching draws on parts-work: getting to know the different voices inside you, so they stop pulling against each other and start working for you.</p>
+      <a class="btn btn-quiet" href="parts-work.html">Discover what parts-work is</a>
     </div>
 
     <details class="row-offer">
       <summary>
         <span class="dot" aria-hidden="true"></span>
         <span class="row-text">
-          <h3>Intro call</h3>
+          <h3>Free intro call</h3>
           <span>One free conversation to name what's getting in the way.</span>
         </span>
         <span class="pill">20 min</span>
@@ -372,7 +376,7 @@
       </summary>
       <div class="row-body">
         <div>
-          <p>A short, unhurried conversation to look at what's going on and see whether parts-work is the right fit for you.</p>
+          <p>A short conversation about where you are, where you'd like to go, and whether my way of coaching is the right fit for you.</p>
           <ul class="ticks">
             <li>20 minutes, no commitment</li>
             <li>We look at what's getting in the way</li>
@@ -382,7 +386,7 @@
         <div class="price-panel">
           <p class="price">Free</p>
           <p class="price-note">No obligation</p>
-          <a class="btn" href="https://cal.com/philippm/15min" target="_blank" rel="noopener">Book a free intro call</a>
+          <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book a free intro call</a>
         </div>
       </div>
     </details>
@@ -393,7 +397,7 @@
       <article class="tier">
         <span class="tier-level">Light</span>
         <h3>A First Commitment</h3>
-        <p class="tier-sub">A gentle start to see what the thread reveals.</p>
+        <p class="tier-sub">A focused start on one thing you want to change.</p>
         <p class="tier-meta">4 weeks, 3 sessions of 60 min</p>
         <p class="price">2,900 kr</p>
         <p class="price-note">Incl. VAT, or 2 × 1,450 kr</p>
@@ -402,30 +406,30 @@
           <li>Messaging support between sessions</li>
           <li>A simple parts log to keep track</li>
         </ul>
-        <a class="btn" href="#contact">Book this offer</a>
+        <a class="btn" href="https://cal.com/philippm/light" target="_blank" rel="noopener">Book this offer</a>
       </article>
 
       <article class="tier tier-featured">
         <span class="badge">The core offer</span>
         <span class="tier-level">Core</span>
         <h3>Three Months With Your Parts</h3>
-        <p class="tier-sub">A steady journey to loosen the patterns you live by.</p>
+        <p class="tier-sub">Enough time to change a pattern and make it stick.</p>
         <p class="tier-meta">3 months, 5 sessions of 75 min</p>
         <p class="price">5,600 kr</p>
         <p class="price-note">Incl. VAT, or 2 × 2,800 kr</p>
         <ul class="ticks">
           <li>Five 75-minute sessions over three months</li>
           <li>Messaging support between sessions</li>
-          <li>Embodiment and parts-work practices to take home</li>
+          <li>Practical exercises to use in everyday life</li>
           <li>A parts log and journal prompts between sessions</li>
         </ul>
-        <a class="btn" href="#contact">Book this offer</a>
+        <a class="btn" href="https://cal.com/philippm/core" target="_blank" rel="noopener">Book this offer</a>
       </article>
 
       <article class="tier">
         <span class="tier-level">Full</span>
         <h3>A Full Season Inside</h3>
-        <p class="tier-sub">The most complete version of the journey.</p>
+        <p class="tier-sub">The deepest work, with support all the way.</p>
         <p class="tier-meta">4 months, 7 sessions of 90 min</p>
         <p class="price">10,500 kr</p>
         <p class="price-note">Incl. VAT, or 3 × 3,500 kr</p>
@@ -433,9 +437,9 @@
           <li>Seven 90-minute sessions over four months</li>
           <li>In-depth written summaries after each session</li>
           <li>Homework and text support throughout</li>
-          <li>Embodiment and parts-work practices to take home</li>
+          <li>Practical exercises to use in everyday life</li>
         </ul>
-        <a class="btn" href="#contact">Book this offer</a>
+        <a class="btn" href="https://cal.com/philippm/full" target="_blank" rel="noopener">Book this offer</a>
       </article>
     </div>
 
@@ -444,24 +448,26 @@
         <span class="dot dot-alt" aria-hidden="true"></span>
         <span class="row-text">
           <h3>Single session</h3>
-          <span>One 60-minute session with the part that keeps getting in the way.</span>
+          <span>One focused session on something you keep circling around.</span>
         </span>
         <span class="pill">60 min</span>
         <span class="toggle" aria-hidden="true"></span>
       </summary>
       <div class="row-body">
         <div>
-          <p>A focused, one-to-one session for one specific part you want to understand better.</p>
+          <p>Is there something you keep circling around? A decision you can't make, a conversation you keep putting off, a goal you know you want but somehow never get to?</p>
+          <p>Often it's not a lack of willpower. It's a part of you with a good reason to hold back. In this session we look at what's really in the way, so you can move forward with it instead of against it.</p>
           <ul class="ticks">
             <li>60 minutes, one-to-one</li>
             <li>Sliding scale, so you can pick what fits</li>
             <li>Written notes afterwards</li>
           </ul>
+          <p style="margin-top:1.2rem">Come with one thing you'd like to move. You'll leave with more clarity and one concrete next step.</p>
         </div>
         <div class="price-panel">
           <p class="price">1,200–1,500 kr</p>
           <p class="price-note">Sliding scale, incl. VAT</p>
-          <a class="btn" href="#contact">Book this offer</a>
+          <a class="btn" href="https://cal.com/philippm/single-session" target="_blank" rel="noopener">Book this offer</a>
         </div>
       </div>
     </details>
@@ -475,7 +481,7 @@
     <h2>Let's have a first conversation</h2>
     <p>A short intro call, no pressure. Tell me a little about what you're carrying, and we'll see if we're a good fit.</p>
     <div class="actions">
-      <a class="btn" href="https://cal.com/philippm/15min" target="_blank" rel="noopener">Book a free intro call</a>
+      <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book a free intro call</a>
       <a class="btn btn-quiet" href="mailto:philipp.mitterhofer@gmail.com">Email me</a>
     </div>
     <p style="margin-top:2rem">Copenhagen and online</p>
@@ -490,11 +496,14 @@
   <div class="wrap">
     <address class="biz">
       <strong>Philipp Mitterhofer</strong><br>
-      Nørre Farimagsgade 57, Copenhagen<br>
+      Nørre Farimagsgade 57, 1364 København<br>
       CVR 41445726<br>
       <a href="mailto:philipp.mitterhofer@gmail.com">philipp.mitterhofer@gmail.com</a>
     </address>
-    <span class="foot-right">© 2026 Philipp Mitterhofer · parts-work.dk</span>
+    <div class="foot-right">
+      <p>Coaching is not therapy or medical treatment.<br>All prices are in DKK incl. 25% VAT.</p>
+      <p>© 2026 Philipp Mitterhofer · parts-work.dk</p>
+    </div>
   </div>
 </footer>
 
@@ -525,22 +534,23 @@
         continue;
       }
       var gap = b.y - 42;
+      var rr = Math.max(2, Math.min(r, Math.abs(b.x - a.x) / 2, Math.abs(gap - a.y) / 2));
       if (b.x > a.x) {
         // Single column: drop straight down the gutter, then step across into the next marker
-        d += ' L' + a.x + ' ' + (gap - r) +
-             ' Q' + a.x + ' ' + gap + ' ' + (a.x + r) + ' ' + gap +
-             ' L' + (b.x - r) + ' ' + gap +
-             ' Q' + b.x + ' ' + gap + ' ' + b.x + ' ' + (gap + r) +
+        d += ' L' + a.x + ' ' + (gap - rr) +
+             ' Q' + a.x + ' ' + gap + ' ' + (a.x + rr) + ' ' + gap +
+             ' L' + (b.x - rr) + ' ' + gap +
+             ' Q' + b.x + ' ' + gap + ' ' + b.x + ' ' + (gap + rr) +
              ' L' + b.x + ' ' + b.y;
         continue;
       }
       // New row: run right, bend down the margin, come back along the gap, drop into the next marker
-      d += ' L' + (right - r) + ' ' + a.y +
-           ' Q' + right + ' ' + a.y + ' ' + right + ' ' + (a.y + r) +
-           ' L' + right + ' ' + (gap - r) +
-           ' Q' + right + ' ' + gap + ' ' + (right - r) + ' ' + gap +
-           ' L' + (b.x + r) + ' ' + gap +
-           ' Q' + b.x + ' ' + gap + ' ' + b.x + ' ' + (gap + r) +
+      d += ' L' + (right - rr) + ' ' + a.y +
+           ' Q' + right + ' ' + a.y + ' ' + right + ' ' + (a.y + rr) +
+           ' L' + right + ' ' + (gap - rr) +
+           ' Q' + right + ' ' + gap + ' ' + (right - rr) + ' ' + gap +
+           ' L' + (b.x + rr) + ' ' + gap +
+           ' Q' + b.x + ' ' + gap + ' ' + b.x + ' ' + (gap + rr) +
            ' L' + b.x + ' ' + b.y;
     }
     path.setAttribute('d', d);
