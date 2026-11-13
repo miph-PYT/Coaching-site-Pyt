@@ -85,6 +85,7 @@
   .site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 0; }
   .brand { font-family: var(--display); font-weight: 800; font-size: 1.35rem; color: var(--lilac); text-decoration: none; }
   .site nav { display: flex; align-items: center; gap: 1.4rem; }
+  .site .navrow { display: flex; align-items: center; gap: 1.4rem; }
   .site nav a { color: var(--soft); text-decoration: none; font-size: 0.95rem; }
   .site nav a:hover { color: var(--lilac); }
   .site nav .btn { color: var(--ink); padding: 0.5rem 1.15rem; font-size: 0.95rem; }
@@ -217,7 +218,12 @@
     .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.2rem; }
   }
   @media (max-width: 860px) {
-    .site nav a:not(.btn) { display: none; }
+    .site .wrap { flex-wrap: wrap; row-gap: 0.4rem; padding-bottom: 0.6rem; }
+    .site nav { display: contents; }
+    .site nav .btn { order: 2; }
+    .site .navrow { order: 3; flex-basis: 100%; display: flex; gap: 0.85rem; overflow-x: auto; scrollbar-width: none; padding: 0.2rem 0 0.1rem; }
+    .site .navrow::-webkit-scrollbar { display: none; }
+    .site .navrow a { white-space: nowrap; font-size: 0.88rem; }
     .tiers { grid-template-columns: 1fr; }
     .tier-featured { order: -1; }
     .tier h3, .tier-sub { min-height: 0; }
@@ -251,11 +257,13 @@
   <div class="wrap">
     <a class="brand" href="#top">Philipp Mitterhofer</a>
     <nav aria-label="Main">
-      <a href="parts-work.html">Parts-work</a>
-      <a href="#offer">How I work</a>
-      <a href="#story">Story</a>
-      <a href="#work">Offers</a>
-      <a href="blog.html">Blog</a>
+      <span class="navrow">
+        <a href="parts-work.html">Parts-work</a>
+        <a href="#offer">How I work</a>
+        <a href="#story">Story</a>
+        <a href="#work">Offers</a>
+        <a href="blog.html">Blog</a>
+      </span>
       <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book</a>
     </nav>
   </div>
