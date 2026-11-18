@@ -243,7 +243,23 @@ const T = {
     saved:`Your answers have been sent to ${CONFIG.coachName}.`, saveFail:"Your answers couldn’t be sent. Use “Copy my answers” to keep them.",
     f:{type:"Session",q1:"Most important",mood:"Leaving",q3:"Goal / shift",q4:"Cost / try",compass:"Compass",use:"Usefulness",better:"Do differently",ready:"Continuing",
        q1f:"What changed",q3f:"Helped most",q4f:"Wanted different",testimonial:"For a friend",share:"May share"},
-    mailSubject:"Session reflection"
+    mailSubject:"Session reflection",
+    fbOption:"Overall feedback",
+    fbTitle:"Your feedback", fbHi:name=>`Hi ${name}. How was it for you?`,
+    fbBody:"I’d love to hear what our time together was like for you. There are no right answers, and you can skip anything. A few words are plenty.",
+    fb1:"When you think back to our session(s), what comes up?", fb1h:"Whatever arrives first.",
+    fb2:"What happened for you in our session(s)? Was there a moment that stayed with you?", fb2h:"A few words are plenty.",
+    fbt:"How would you describe working with me to a friend?", fbth:"In your own words.",
+    fbShare:"May I share some of your words on my website?",
+    fbShareOpts:{name:"Yes, with my first name", anon:"Yes, anonymously", no:"No, this is just for you"},
+    fbName:"Your first name, so I know who wrote this",
+    fbFinish:"Send my feedback",
+    fbResTitle:name=>name?`Thank you, ${name}.`:"Thank you.",
+    fbResBody:"Your words mean a lot to me. Reading how our work landed for you helps me do it better, and helps the next person find their way here.",
+    fbResShared:"I’ll only use what you wrote the way you chose.",
+    fbBook:"If you ever want to pick things up again, you’re always welcome.",
+    fbMail:"Feedback",
+    f2:{first:"What comes up",moment:"A moment that stayed",friend:"To a friend",share:"May share",name:"Name"}
   },
   da:{
     brand:`Coaching med ${CONFIG.coachName}`, back:"Tilbage", next:"Næste", finish:"Se mit næste skridt",
@@ -320,7 +336,23 @@ const T = {
     saved:`Dine svar er sendt til ${CONFIG.coachName}.`, saveFail:"Dine svar kunne ikke sendes. Brug »Kopiér mine svar« for at beholde dem.",
     f:{type:"Session",q1:"Vigtigst",mood:"Går herfra",q3:"Mål / skift",q4:"Pris / prøve",compass:"Kompas",use:"Brugbarhed",better:"Gøre anderledes",ready:"Fortsætte",
        q1f:"Har ændret sig",q3f:"Hjalp mest",q4f:"Ønsket anderledes",testimonial:"Til en ven",share:"Må deles"},
-    mailSubject:"Refleksion efter session"
+    mailSubject:"Refleksion efter session",
+    fbOption:"Samlet feedback",
+    fbTitle:"Din feedback", fbHi:name=>`Hej ${name}. Hvordan var det for dig?`,
+    fbBody:"Jeg vil rigtig gerne høre, hvordan vores tid sammen var for dig. Der er ingen rigtige svar, og du kan springe alt over. Et par ord er rigeligt.",
+    fb1:"Når du tænker tilbage på vores session(er), hvad dukker der så op?", fb1h:"Det, der kommer først.",
+    fb2:"Hvad skete der for dig i vores session(er)? Var der et øjeblik, der er blevet hos dig?", fb2h:"Et par ord er rigeligt.",
+    fbt:"Hvordan ville du beskrive det at arbejde med mig til en ven?", fbth:"Med dine egne ord.",
+    fbShare:"Må jeg dele nogle af dine ord på min hjemmeside?",
+    fbShareOpts:{name:"Ja, med mit fornavn", anon:"Ja, anonymt", no:"Nej, det er kun til dig"},
+    fbName:"Dit fornavn, så jeg ved, hvem der har skrevet",
+    fbFinish:"Send min feedback",
+    fbResTitle:name=>name?`Tak, ${name}.`:"Tak.",
+    fbResBody:"Dine ord betyder meget for mig. At læse, hvordan vores arbejde landede hos dig, hjælper mig til at gøre det bedre og hjælper den næste til at finde vej hertil.",
+    fbResShared:"Jeg bruger kun det, du skrev, sådan som du har valgt.",
+    fbBook:"Hvis du nogensinde vil tage tråden op igen, er du altid velkommen.",
+    fbMail:"Feedback",
+    f2:{first:"Det der dukker op",moment:"Et øjeblik der blev",friend:"Til en ven",share:"Må deles",name:"Navn"}
   }
 };
 
@@ -329,6 +361,7 @@ const T = {
    …/reflect/?s=intake&name=Anna  → send to a client after the session (s = intake or 1–5)
    ?s=1 … ?s=4                    → regular session questions, plus the 1–10 compass scale
    ?s=5                           → final session: looking back, compass, testimonial, what's next
+   ?s=feedback                    → overall feedback / testimonial for marketing (like the Google Form)
    add &note=… for your next-step note, &lang=da for Danish */
 const params = new URLSearchParams(location.search);
 const coachMode = location.hash === "#coach";
@@ -338,7 +371,7 @@ const t = k => T[lang][k];
 const $ = s => document.querySelector(s);
 const app = $("#app");
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const SESSIONS = ["intake","1","2","3","4","5"];
+const SESSIONS = ["intake","1","2","3","4","5","feedback"];
 
 let state, step, sent = false;
 function fresh(){
@@ -358,8 +391,9 @@ function stageOf(s){ if(s==="intake")return 0; const n=+s; return n===1?1:n<=4?2
 const STAGES = ["intake","settle","excavate","land"];
 const isIntake = () => state.session === "intake";
 const isFinal = () => state.session === "5";
+const isFeedback = () => state.session === "feedback";
 /* Which question set: intake, regular session (1–4), or final (5) */
-const kind = () => isIntake() ? "intake" : isFinal() ? "final" : "session";
+const kind = () => isFeedback() ? "feedback" : isIntake() ? "intake" : isFinal() ? "final" : "session";
 const pick = (i,s,f) => ({intake:i, session:s, final:f})[kind()];
 
 function applyLang(){
@@ -369,7 +403,7 @@ function applyLang(){
   const brand=$("#brand"); brand.textContent = t("brand"); brand.href = CONFIG.homeUrl;
   const ct=$("#contactTop"); if(contactHref()){ ct.href=contactHref(); ct.textContent=t("contactShort"); ct.classList.remove("hidden"); if(CONFIG.contactUrl) ct.target="_blank"; }
   const sel=$("#cNum"), cur=sel.value;
-  sel.innerHTML = SESSIONS.map(v=>`<option value="${v}">${esc(v==="intake"?t("intake"):t("sess")(v))}</option>`).join("");
+  sel.innerHTML = SESSIONS.map(v=>`<option value="${v}">${esc(v==="intake"?t("intake"):v==="feedback"?t("fbOption"):t("sess")(v))}</option>`).join("");
   sel.value = cur || "intake";
 }
 
@@ -377,17 +411,21 @@ function applyLang(){
 const STEP_SETS = {
   intake:  ["start","q1","q2","q3","q4","q5","q6","result"],
   session: ["start","q1","q2","q3","q4","compass","q5","q6","result"],
-  final:   ["start","q1","q2","q3","q4","compass","testimonial","q6","result"]
+  final:   ["start","q1","q2","q3","q4","compass","testimonial","q6","result"],
+  feedback:["start","fb1","fb2","fbt","result"]
 };
 const steps = () => STEP_SETS[kind()];
 const RANGE = n => Array.from({length:n},(_,i)=>i+1);
 const progress = () => `<div class="progress" aria-hidden="true">${RANGE(steps().length-2).map(i=>`<span class="${i<=step?'on':''}"></span>`).join("")}</div>`;
-const nav = (canNext=true,last=false) => `<div class="nav">
+const nav = (canNext=true,last=false,label) => `<div class="nav">
     <button class="linkbtn" data-act="back">${esc(t("back"))}</button>
-    <button class="btn" data-act="${last?'finish':'next'}" ${canNext?'':'disabled'}>${esc(last?t("finish"):t("next"))}</button></div>`;
+    <button class="btn" data-act="${last?'finish':'next'}" ${canNext?'':'disabled'}>${esc(label||(last?t("finish"):t("next")))}</button></div>`;
 const textQ = (key,label,hint) => `${progress()}<div class="reveal"><label class="qtitle" for="f">${esc(label)}</label>
     <p class="hint">${esc(hint)}</p><textarea id="f" data-key="${key}">${esc(state[key])}</textarea></div>${nav()}`;
 const DOTS = ["var(--peach)","var(--sage)","var(--stone)","var(--leaf)"];
+/* Feedback: a share choice and a first name are required, like the Google Form */
+const fbReady = () => !!state.share && !!String(state.name).trim();
+const fbSync = () => { const b=app.querySelector('[data-act="finish"]'); if(b && isFeedback()) b.disabled=!fbReady(); };
 const readyOptions = () => isFinal() ? t("rf") : t("r");
 const nextSteps = () => isFinal() ? t("nxf") : t("nx");
 
@@ -395,9 +433,23 @@ function render(){
   const s = steps()[step];
   if(s==="start"){
     readCoach();
-    app.innerHTML = `<div class="panel reveal"><h1>${esc(state.name ? t("startHi")(state.name) : t("startTitle"))}</h1>
-      <p class="muted" style="max-width:52ch">${esc(isFinal()?t("startBodyF"):t("startBody"))}</p>
+    const title = isFeedback() ? (state.name ? t("fbHi")(state.name) : t("fbTitle")) : (state.name ? t("startHi")(state.name) : t("startTitle"));
+    const body = isFeedback() ? t("fbBody") : isFinal() ? t("startBodyF") : t("startBody");
+    app.innerHTML = `<div class="panel reveal"><h1>${esc(title)}</h1>
+      <p class="muted" style="max-width:52ch">${esc(body)}</p>
       <div class="nav" style="justify-content:flex-start"><button class="btn" data-act="next">${esc(t("start"))}</button></div></div>`;
+  }
+  if(s==="fb1") app.innerHTML = textQ("q1", t("fb1"), t("fb1h"));
+  if(s==="fb2") app.innerHTML = textQ("q3", t("fb2"), t("fb2h"));
+  if(s==="fbt"){
+    const S=t("fbShareOpts");
+    app.innerHTML = `${progress()}<div class="reveal"><label class="qtitle" for="f">${esc(t("fbt"))}</label>
+      <p class="hint">${esc(t("fbth"))}</p><textarea id="f" data-key="testimonial">${esc(state.testimonial)}</textarea>
+      <p class="sublabel" id="shareLbl">${esc(t("fbShare"))}</p>
+      <div class="chips" role="group" aria-labelledby="shareLbl">${Object.keys(S).map(k=>`<button class="chip" data-share="${k}" aria-pressed="${state.share===k}">${esc(S[k])}</button>`).join("")}</div>
+      <label class="sublabel" for="fbName">${esc(t("fbName"))}</label>
+      <input type="text" id="fbName" data-key="name" value="${esc(state.name)}" autocomplete="given-name"></div>
+      ${nav(fbReady(),true,t("fbFinish"))}`;
   }
   if(s==="q1") app.innerHTML = isFinal() ? textQ("q1", t("q1f"), t("q1fh")) : textQ("q1", t("q1"), t("q1h"));
   if(s==="q2") app.innerHTML = `${progress()}<div class="reveal"><p class="qtitle">${esc(isFinal()?t("q2f"):t("q2"))}</p><p class="hint">${esc(t("q2h"))}</p>
@@ -455,6 +507,12 @@ function arcSVG(pos){
 /* ---------- result ---------- */
 function moodText(){ return [...state.mood.map(i=>t("moods")[i]), state.moodOther.trim()].filter(Boolean).join(", "); }
 function summaryText(){
+  if(isFeedback()){
+    const G=t("f2");
+    return [`${t("fbMail")} – ${state.name||"–"} (${new Date().toLocaleDateString(lang==="da"?"da-DK":"en-GB")})`,
+      `${G.first}: ${state.q1||"–"}`, `${G.moment}: ${state.q3||"–"}`, `${G.friend}: ${state.testimonial||"–"}`,
+      `${G.share}: ${state.share?t("fbShareOpts")[state.share]:"–"}`].join("\n");
+  }
   const F=t("f"), sess = isIntake()?t("intake"):t("sess")(state.session);
   const lines = [`${t("mailSubject")}${state.name?" – "+state.name:""} (${new Date().toLocaleDateString(lang==="da"?"da-DK":"en-GB")})`,
     `${F.type}: ${sess}`];
@@ -491,7 +549,27 @@ function clientCopyText(){
   return lines.join("\n");
 }
 
+function renderFeedbackResult(){
+  const G=t("f2");
+  const quotes=[[G.moment,state.q3],[G.friend,state.testimonial]].filter(([,v])=>String(v).trim())
+    .map(([c,v])=>`<p class="quote"><cite>${esc(c)}</cite><q>${esc(v.trim())}</q></p>`).join("");
+  app.innerHTML = `<div class="reveal">
+    <div class="panel"><h1>${esc(t("fbResTitle")(state.name.trim()))}</h1>
+      <p style="max-width:52ch">${esc(t("fbResBody"))}</p>
+      ${state.share && state.share!=="no" ? `<p class="muted" style="margin:0">${esc(t("fbResShared"))}</p>` : ""}</div>
+    ${quotes?`<div class="card" style="margin-top:22px">${quotes}</div>`:""}
+    <p style="margin-top:26px">${esc(t("fbBook"))}</p>
+    <div class="actions" style="margin-top:12px">
+      ${contactHref()?`<a class="btn outline" href="${esc(contactHref())}" ${CONFIG.contactUrl?'target="_blank" rel="noopener"':''}>${esc(t("contact"))}</a>`:""}
+      ${(!CONFIG.sheetUrl && CONFIG.email)?`<a class="btn outline" href="${mailto(t("fbMail"),summaryText())}">${esc(t("sendBtn"))}</a>`:""}
+      ${coachMode?`<button class="linkbtn" data-act="again">${esc(t("again"))}</button>`:""}
+    </div>
+    <p class="status" id="status" aria-live="polite"></p></div>`;
+  sendToSheet();
+}
+
 function renderResult(){
+  if(isFeedback()) return renderFeedbackResult();
   const pos=stageOf(state.session), nextPos=Math.min(pos+1,3);
   const [nh,nb]=nextSteps()[state.ready];
   const quoteSrc = pick([[t("youSaid3i"),state.q3],[t("youSaid4i"),state.q4]],
@@ -564,20 +642,20 @@ async function sendToSheet(){
     await fetch(CONFIG.sheetUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},
       body:JSON.stringify({type:"reflection", id:state.id, timestamp:new Date().toISOString(), lang, session:state.session, name:state.name,
         q1:state.q1, mood:moodText(), q3:state.q3, q4:state.q4, compass:state.compass||"", use:state.use, better:state.better,
-        testimonial:state.testimonial, share:state.share ? T.en.share[state.share] : "",
-        ready:state.ready ? enReady[state.ready][0] : "", note:state.note})});
+        testimonial:state.testimonial, share:state.share ? (isFeedback()?T.en.fbShareOpts:T.en.share)[state.share] : "",
+        ready:state.ready && enReady[state.ready] ? enReady[state.ready][0] : "", note:state.note})});
     if(st()) st().textContent=t("saved");
   }catch(_){ sent=false; if(st()) st().textContent=t("saveFail"); }
 }
 
 /* ---------- events ---------- */
-app.addEventListener("input", e=>{ const k=e.target.dataset.key; if(k) state[k]=e.target.value; });
+app.addEventListener("input", e=>{ const k=e.target.dataset.key; if(k) state[k]=e.target.value; if(k==="name") fbSync(); });
 app.addEventListener("click", async e=>{
   const b=e.target.closest("button,a"); if(!b) return;
   if(b.dataset.mood!==undefined){ const i=+b.dataset.mood; state.mood=state.mood.includes(i)?state.mood.filter(x=>x!==i):[...state.mood,i]; b.setAttribute("aria-pressed",state.mood.includes(i)); return; }
   if(b.dataset.use){ state.use=+b.dataset.use; app.querySelectorAll("[data-use]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.use===state.use)); return; }
   if(b.dataset.compass){ state.compass=+b.dataset.compass; app.querySelectorAll("[data-compass]").forEach(x=>{ const n=+x.dataset.compass; x.setAttribute("aria-pressed",n===state.compass); x.classList.toggle("passed",n<state.compass); }); return; }
-  if(b.dataset.share){ state.share = state.share===b.dataset.share ? "" : b.dataset.share; app.querySelectorAll("[data-share]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.share===state.share)); return; }
+  if(b.dataset.share){ state.share = state.share===b.dataset.share ? "" : b.dataset.share; app.querySelectorAll("[data-share]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.share===state.share)); fbSync(); return; }
   if(b.dataset.ready){ state.ready=b.dataset.ready; app.querySelectorAll("[data-ready]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.ready===state.ready)); app.querySelector('[data-act="finish"]').disabled=false; return; }
   const a=b.dataset.act;
   if(a==="next"){ if(step===0){ readCoach(); $("#coach").open=false; } step++; render(); }
