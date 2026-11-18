@@ -253,6 +253,31 @@
   .foot-right p { margin: 0 0 0.4rem; }
   .site nav a[aria-current="page"] { color: var(--lilac); }
   @media (max-width: 760px) { .foot-right { text-align: left; } }
+
+  /* Mobile menu: brand + Book + menu button; links open as a list */
+  .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    .site .wrap { flex-wrap: wrap; row-gap: 0; padding: 0.7rem 0; }
+    .site nav { display: contents; }
+    .brand { order: 1; margin-right: auto; }
+    .site nav .btn { order: 2; }
+    .menu-toggle { order: 3; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-left: 0.6rem; border-radius: 50%; border: 2px solid var(--menu-line, rgba(224,250,255,0.35)); background: transparent; color: var(--menu-ink, var(--lilac)); cursor: pointer; padding: 0; }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { display: block; width: 1.05rem; height: 2px; background: currentColor; border-radius: 2px; position: relative; transition: transform 0.2s, background 0.2s; }
+    .menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; }
+    .menu-toggle span::before { top: -6px; } .menu-toggle span::after { top: 6px; }
+    .site.open .menu-toggle span { background: transparent; }
+    .site.open .menu-toggle span::before { transform: translateY(6px) rotate(45deg); }
+    .site.open .menu-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
+    .site .navrow { order: 4; flex-basis: 100%; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 0.5rem 0 0.3rem; overflow: visible; }
+    .site.open .navrow { display: flex; }
+    .site .navrow a { font-size: 1.1rem; padding: 0.7rem 0; white-space: normal; border-top: 1px solid var(--menu-line, rgba(224,250,255,0.12)); }
+    .site .wrap { gap: 0.5rem; flex-wrap: wrap; }
+    .brand { font-size: clamp(1rem, 4.6vw, 1.2rem); white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+    .site nav .btn { padding: 0.45rem 0.95rem; font-size: 0.9rem; white-space: nowrap; flex: 0 0 auto; }
+    .menu-toggle { flex: 0 0 auto; margin-left: 0; }
+    .site .wrap { flex-wrap: nowrap; position: relative; padding: 0.7rem 0; }
+    .site .navrow { position: absolute; top: 100%; left: -1.5rem; right: -1.5rem; padding: 0.3rem 1.5rem 0.8rem; background: var(--menu-bg, rgba(31,95,88,0.98)); border-bottom: 1px solid var(--menu-line, rgba(224,250,255,0.12)); box-shadow: 0 18px 30px rgba(0,0,0,0.15); }
+  }
 </style>
 </head>
 <body>
@@ -266,10 +291,12 @@
         <a href="#offer">How I work</a>
         <a href="#story">Story</a>
         <a href="#work">Offers</a>
+        <a href="workshops.html">Workshops</a>
         <a href="blog.html">Blog</a>
       </span>
       <a class="btn" href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">Book</a>
     </nav>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false"><span></span></button>
   </div>
 </header>
 
@@ -480,6 +507,33 @@
           <p class="price">1,200–1,500 kr</p>
           <p class="price-note">Sliding scale, incl. VAT</p>
           <a class="btn" href="https://cal.com/philippm/single-session" target="_blank" rel="noopener">Book this offer</a>
+        </div>
+      </div>
+    </details>
+
+    <details class="row-offer">
+      <summary>
+        <span class="dot dot-alt" aria-hidden="true"></span>
+        <span class="row-text">
+          <h3>Workshops</h3>
+          <span>Small-group workshops where we sit down with one part at a time.</span>
+        </span>
+        <span class="pill">Group</span>
+        <span class="toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="row-body">
+        <div>
+          <p>Over a cup of coffee and a notebook, we sit down with one part of us at a time, like the inner critic, and get curious about it instead of fighting it. A gentle, hands-on way into parts-work.</p>
+          <ul class="ticks">
+            <li>60 minutes (lunch version) or 2 hours</li>
+            <li>Open sessions, or booked for your co-working space or team</li>
+            <li>English or Danish</li>
+          </ul>
+        </div>
+        <div class="price-panel">
+          <p class="price">Workshops</p>
+          <p class="price-note">Open dates and bookings for your space or team</p>
+          <a class="btn" href="workshops.html">See all workshops</a>
         </div>
       </div>
     </details>
@@ -754,6 +808,14 @@
   document.addEventListener('pointerleave', function () { pointer.x = pointer.y = -9999; });
   var rt;
   window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { var was = small; resize(); if (was !== small) make(); }, 150); });
+})();
+</script>
+<script>
+(function () {
+  var site = document.querySelector('.site'), btn = site && site.querySelector('.menu-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', function () { var o = site.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });
+  site.querySelectorAll('.navrow a').forEach(function (a) { a.addEventListener('click', function () { site.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }); });
 })();
 </script>
 </body>

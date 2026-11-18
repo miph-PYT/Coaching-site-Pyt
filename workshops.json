@@ -1,0 +1,31 @@
+{
+  "workshops": [
+    {
+      "title": "Coffee with Your Inner Critic",
+      "slug": "inner-critic",
+      "status": "On request",
+      "tagline": "Meeting the voice that holds you back, with curiosity instead of a fight.",
+      "length": "60 minutes (lunch version) or 2 hours",
+      "language": "English or Danish",
+      "group": "",
+      "price": "",
+      "next": "",
+      "bring": "A notebook and a pen",
+      "intro": "It's not good enough yet. Who do you think you are? Just one more check before you send it.\n\nMost of us know that voice. And most of us have tried to argue with it, ignore it or shout it down. It rarely works.\n\nIn this workshop we sit down with the inner critic over a cup of coffee and get curious about it. What is it trying to do for you? What is it afraid would happen if it stopped?\n\nEven the loud, critical one has a good reason for what it does.",
+      "foryou": [
+        "You know a voice that says it's not good enough yet",
+        "You get in your own way and wonder, \"Why can't I just do it?\"",
+        "You're tired of fighting yourself",
+        "You're curious about parts-work and don't know where to start"
+      ],
+      "steps": [
+        { "title": "Landing", "text": "We arrive, with a cup of coffee." },
+        { "title": "Parts-work in plain words", "text": "What a \"part\" is, and why there are no bad ones." },
+        { "title": "Meeting your critic", "text": "A short guided exercise with your notebook." },
+        { "title": "Two questions", "text": "We ask the critic what it's trying to do for you, and what it's afraid of." },
+        { "title": "Sharing", "text": "In pairs, then in the group, as much or as little as you like." },
+        { "title": "Closing", "text": "We thank the part, and you take home a card with the questions for the next time it shows up." }
+      ]
+    }
+  ]
+}

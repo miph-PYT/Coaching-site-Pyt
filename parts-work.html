@@ -263,6 +263,31 @@
   .steps.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   @media (max-width: 960px) { .steps.three { grid-template-columns: 1fr; } .steps.three li { padding-top: 0; padding-left: 3.6rem; } }
   .band-alt .steps .marker { box-shadow: 0 0 0 6px var(--band); }
+
+  /* Mobile menu: brand + Book + menu button; links open as a list */
+  .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    .site .wrap { flex-wrap: wrap; row-gap: 0; padding: 0.7rem 0; }
+    .site nav { display: contents; }
+    .brand { order: 1; margin-right: auto; }
+    .site nav .btn { order: 2; }
+    .menu-toggle { order: 3; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-left: 0.6rem; border-radius: 50%; border: 2px solid var(--menu-line, rgba(224,250,255,0.35)); background: transparent; color: var(--menu-ink, var(--lilac)); cursor: pointer; padding: 0; }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { display: block; width: 1.05rem; height: 2px; background: currentColor; border-radius: 2px; position: relative; transition: transform 0.2s, background 0.2s; }
+    .menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; }
+    .menu-toggle span::before { top: -6px; } .menu-toggle span::after { top: 6px; }
+    .site.open .menu-toggle span { background: transparent; }
+    .site.open .menu-toggle span::before { transform: translateY(6px) rotate(45deg); }
+    .site.open .menu-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
+    .site .navrow { order: 4; flex-basis: 100%; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 0.5rem 0 0.3rem; overflow: visible; }
+    .site.open .navrow { display: flex; }
+    .site .navrow a { font-size: 1.1rem; padding: 0.7rem 0; white-space: normal; border-top: 1px solid var(--menu-line, rgba(224,250,255,0.12)); }
+    .site .wrap { gap: 0.5rem; flex-wrap: wrap; }
+    .brand { font-size: clamp(1rem, 4.6vw, 1.2rem); white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+    .site nav .btn { padding: 0.45rem 0.95rem; font-size: 0.9rem; white-space: nowrap; flex: 0 0 auto; }
+    .menu-toggle { flex: 0 0 auto; margin-left: 0; }
+    .site .wrap { flex-wrap: nowrap; position: relative; padding: 0.7rem 0; }
+    .site .navrow { position: absolute; top: 100%; left: -1.5rem; right: -1.5rem; padding: 0.3rem 1.5rem 0.8rem; background: var(--menu-bg, rgba(31,95,88,0.98)); border-bottom: 1px solid var(--menu-line, rgba(224,250,255,0.12)); box-shadow: 0 18px 30px rgba(0,0,0,0.15); }
+  }
 </style>
 </head>
 <body>
@@ -276,10 +301,12 @@
         <a href="index.html#offer">How I work</a>
         <a href="index.html#story">Story</a>
         <a href="index.html#work">Offers</a>
+        <a href="workshops.html">Workshops</a>
         <a href="blog.html">Blog</a>
       </span>
       <a class="btn" href="index.html#work">Book</a>
     </nav>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false"><span></span></button>
   </div>
 </header>
 
@@ -603,5 +630,13 @@
 })();
 </script>
 
+<script>
+(function () {
+  var site = document.querySelector('.site'), btn = site && site.querySelector('.menu-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', function () { var o = site.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });
+  site.querySelectorAll('.navrow a').forEach(function (a) { a.addEventListener('click', function () { site.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }); });
+})();
+</script>
 </body>
 </html>

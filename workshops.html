@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workshops | parts-work.dk</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="description" content="Parts-work workshops in Copenhagen with Philipp Mitterhofer: sit down with the parts of you that make life hard, over a cup of coffee, with curiosity instead of a fight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ground:#1f5f58;--band:#2f7b70;--raised:#2a6e66;--sunk:#1a524c;--brand:#46998d;--lilac:#e8d4f0;--cyan:#e0faff;--soft:#cfeee9;--ink:#1d4f80;--ochre:#d4a33a;--rose:#dcb2bd;
+--display:"Nunito","Arial Rounded MT Bold",system-ui,sans-serif;--voice:"Cormorant Garamond",Georgia,serif;--body:"Inter",system-ui,sans-serif;--measure:40rem;--wide:72rem}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--cyan);font-family:var(--body);font-size:1.0625rem;line-height:1.7}
+a{color:var(--lilac)}p{margin:0 0 1.1em}
+.wrap{width:min(100% - 3rem,var(--wide));margin-inline:auto}
+.btn{display:inline-block;padding:.85rem 1.6rem;border-radius:999px;background:var(--lilac);color:var(--ink);font-family:var(--display);font-weight:800;font-size:1rem;text-decoration:none;border:2px solid var(--lilac)}
+.btn-quiet{background:transparent;color:var(--lilac)}
+.actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.6rem}
+.site{position:sticky;top:0;z-index:10;background:rgba(31,95,88,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(224,250,255,.12)}
+.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 0}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--lilac);text-decoration:none}
+.site nav,.site .navrow{display:flex;align-items:center;gap:1.4rem}
+.site nav a{color:var(--soft);text-decoration:none;font-size:.95rem}.site nav .btn{color:var(--ink);padding:.5rem 1.15rem;font-size:.95rem}
+footer{padding:2rem 0;color:var(--soft);font-size:.88rem}footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.2rem}
+footer .biz{font-style:normal;line-height:1.6}footer .biz strong{color:var(--cyan);font-weight:500}footer a{color:var(--soft)}.foot-right{text-align:right}.foot-right p{margin:0 0 .4rem}
+h1,h2,h3{font-family:var(--voice);font-style:italic;font-weight:600;line-height:1.15;margin:0}
+@media(max-width:860px){.site .wrap{flex-wrap:wrap}.site nav{display:contents}.site .navrow{order:3;flex-basis:100%;overflow-x:auto;gap:.85rem}.foot-right{text-align:left}}
+
+.letter .ask{font-family:var(--voice);font-style:italic;font-weight:600;font-size:2.1rem;color:var(--ground);line-height:1.2}
+body{background:#f4ede3;color:#24413d}
+.site{background:rgba(244,237,227,.92);border-color:rgba(31,95,88,.15)}.brand{color:var(--ground)}.site nav a{color:#3d5f5a}.site nav .btn{background:var(--ground);border-color:var(--ground);color:#f4ede3}
+a{color:var(--ground)}
+.letter{max-width:38rem;margin:0 auto;padding:clamp(3rem,8vw,6rem) 1.5rem 2rem}
+.date{font-family:var(--display);font-weight:800;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#b07f1a}
+.letter h1{font-size:clamp(2.8rem,7vw,4.8rem);color:var(--ground);margin:.6rem 0 1.5rem;line-height:1.05}
+.letter .lead{font-family:var(--voice);font-style:italic;font-size:1.6rem;line-height:1.35;color:#3d5f5a}
+.crossed{margin:3rem 0;padding:0;list-style:none}
+.crossed li{font-family:var(--voice);font-style:italic;font-weight:600;font-size:clamp(1.6rem,3.6vw,2.2rem);line-height:1.25;margin-bottom:1.2rem}
+.crossed s{text-decoration:none;color:#9a8c7a;background:linear-gradient(#c0563f,#c0563f) no-repeat 0 58%/0 3px;transition:background-size .8s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.crossed li.on s{background-size:100% 3px}
+.crossed em{display:block;font-size:.75em;color:var(--ground);opacity:0;transition:opacity .6s .5s}
+.crossed li.on em{opacity:1}
+.letter p{font-size:1.12rem}
+.letter h2{font-size:2rem;color:var(--ground);margin:3rem 0 1rem}
+.letter ul{padding-left:1.2rem}.letter li{margin-bottom:.4rem}
+.steps{counter-reset:s;list-style:none;padding:0}.steps li{counter-increment:s;padding:.6rem 0 .6rem 3rem;position:relative;border-bottom:1px solid rgba(31,95,88,.15)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.55rem;width:2rem;height:2rem;border-radius:50%;background:var(--ground);color:#f4ede3;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps b{font-weight:500}
+.card{background:#fff;border-radius:1.2rem;padding:1.6rem 1.8rem;margin:2rem 0;box-shadow:0 10px 30px rgba(31,95,88,.08)}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.4rem;margin:0}.card dt{color:#6b7f7b}.card dd{margin:0}
+.btn{background:var(--ground);border-color:var(--ground);color:#f4ede3}.btn-quiet{background:transparent;color:var(--ground)}
+.sign{font-family:var(--voice);font-style:italic;font-size:2.6rem;color:var(--ground);margin-top:2.5rem}
+footer{background:var(--ground);margin-top:3rem}
+
+.site nav a[aria-current="page"]{color:var(--ground);font-weight:500}
+.crossed{margin:2.5rem 0}
+.list{display:grid;gap:1.2rem;margin:1.5rem 0 1rem}
+.wcard{display:block;background:#fff;border-radius:1.2rem;padding:1.5rem 1.8rem;text-decoration:none;color:inherit;box-shadow:0 10px 30px rgba(31,95,88,.08);transition:transform .2s,box-shadow .2s}
+.wcard:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(31,95,88,.14)}
+.wcard .pill{display:inline-block;background:#f4ede3;color:#b07f1a;font-family:var(--display);font-weight:800;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .7rem;border-radius:999px}
+.wcard h3{font-size:1.9rem;color:var(--ground);margin:.6rem 0 .3rem}
+.wcard p{margin:0 0 .6rem;color:#3d5f5a}
+.wcard .meta{font-size:.9rem;color:#6b7f7b}
+.wcard .more{font-family:var(--display);font-weight:800;color:var(--ground);font-size:.95rem}
+.frame{padding-left:1.2rem}.frame li{margin-bottom:.5rem}
+.back{display:inline-block;text-decoration:none;color:#6b7f7b;margin-bottom:1.5rem}
+.intro-voice p:first-child{font-family:var(--voice);font-style:italic;font-weight:600;font-size:1.7rem;line-height:1.3;color:#9a8c7a}
+.letter[hidden]{display:none}
+
+  .site { --menu-ink: var(--ground); --menu-line: rgba(31,95,88,0.18); --menu-bg: rgba(244,237,227,0.98); }
+  /* Mobile menu: brand + Book + menu button; links open as a list */
+  .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    .site .wrap { flex-wrap: wrap; row-gap: 0; padding: 0.7rem 0; }
+    .site nav { display: contents; }
+    .brand { order: 1; margin-right: auto; }
+    .site nav .btn { order: 2; }
+    .menu-toggle { order: 3; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-left: 0.6rem; border-radius: 50%; border: 2px solid var(--menu-line, rgba(224,250,255,0.35)); background: transparent; color: var(--menu-ink, var(--lilac)); cursor: pointer; padding: 0; }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { display: block; width: 1.05rem; height: 2px; background: currentColor; border-radius: 2px; position: relative; transition: transform 0.2s, background 0.2s; }
+    .menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; }
+    .menu-toggle span::before { top: -6px; } .menu-toggle span::after { top: 6px; }
+    .site.open .menu-toggle span { background: transparent; }
+    .site.open .menu-toggle span::before { transform: translateY(6px) rotate(45deg); }
+    .site.open .menu-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
+    .site .navrow { order: 4; flex-basis: 100%; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 0.5rem 0 0.3rem; overflow: visible; }
+    .site.open .navrow { display: flex; }
+    .site .navrow a { font-size: 1.1rem; padding: 0.7rem 0; white-space: normal; border-top: 1px solid var(--menu-line, rgba(224,250,255,0.12)); }
+    .site .wrap { gap: 0.5rem; flex-wrap: wrap; }
+    .brand { font-size: clamp(1rem, 4.6vw, 1.2rem); white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+    .site nav .btn { padding: 0.45rem 0.95rem; font-size: 0.9rem; white-space: nowrap; flex: 0 0 auto; }
+    .menu-toggle { flex: 0 0 auto; margin-left: 0; }
+    .site .wrap { flex-wrap: nowrap; position: relative; padding: 0.7rem 0; }
+    .site .navrow { position: absolute; top: 100%; left: -1.5rem; right: -1.5rem; padding: 0.3rem 1.5rem 0.8rem; background: var(--menu-bg, rgba(31,95,88,0.98)); border-bottom: 1px solid var(--menu-line, rgba(224,250,255,0.12)); box-shadow: 0 18px 30px rgba(0,0,0,0.15); }
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Philipp Mitterhofer</a>
+    <nav aria-label="Main">
+      <span class="navrow">
+        <a href="parts-work.html">Parts-work</a>
+        <a href="index.html#offer">How I work</a>
+        <a href="index.html#story">Story</a>
+        <a href="index.html#work">Offers</a>
+        <a href="workshops.html" aria-current="page">Workshops</a>
+        <a href="blog.html">Blog</a>
+      </span>
+      <a class="btn" href="index.html#work">Book</a>
+    </nav>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+<main>
+<div class="letter" id="hub">
+<p class="date">Workshops · Copenhagen</p>
+<h1>Ever tried sitting down with your inner critic?</h1>
+<p class="lead">That's usually not our first impulse. But in parts-work, that's exactly what we do!</p>
+<ul class="crossed">
+<li><s>It's not good enough yet.</s><em>What are you trying to protect me from?</em></li>
+<li><s>Who do you think you are?</s><em>What are you afraid would happen if you stopped?</em></li>
+<li><s>Just one more check before you send it.</s><em>Thank you. I've got this one.</em></li>
+</ul>
+<p>In my workshops we sit down with one part of us at a time, over a cup of coffee and a notebook. We ask it what it's trying to do for us, and what it's afraid would happen if it stopped. And we notice what happens when we meet it with curiosity and openness.</p>
+<p>The idea behind <a href="parts-work.html">parts-work</a> is simple: you're not one person fighting yourself. You're more like a group, and every member has a good reason for what it does.</p>
+
+<h2>Workshops</h2>
+<div class="list" id="list"></div>
+
+<h2>How the workshops work</h2>
+<ul class="frame">
+<li>Small groups, in person, sitting down. Everyday clothes, no touch.</li>
+<li>In English or Danish. No experience needed, just a notebook and some curiosity.</li>
+<li>Everything is an invitation. You decide how much you share; writing and listening count as taking part fully.</li>
+<li>This is not therapy. It's a space for reflection and learning. We stay with everyday patterns, not old wounds.</li>
+</ul>
+
+<h2>Bring a workshop to your space or team</h2>
+<p>I run these workshops for co-working spaces, workplaces and communities, as a lunch session or an afternoon break. <a href="mailto:Philipp@parts-work.dk?subject=Workshop%20for%20our%20space">Write to me</a> and we'll find a format that fits.</p>
+<p>And if something comes up that you'd like to look at more closely, you're welcome to <a href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">book a free 20-minute call</a>.</p>
+<p class="sign">Philipp</p>
+</div>
+
+<article class="letter" id="detail" hidden></article>
+</main>
+<footer>
+  <div class="wrap">
+    <address class="biz">
+      <strong>Philipp Mitterhofer</strong><br>
+      Nørre Farimagsgade 57, 1364 København<br>
+      CVR 41445726<br>
+      <a href="mailto:Philipp@parts-work.dk">Philipp@parts-work.dk</a>
+    </address>
+    <div class="foot-right">
+      <p>Coaching is not therapy or medical treatment.<br>All prices are in DKK incl. 25% VAT.</p>
+      <p>© 2026 Philipp Mitterhofer · parts-work.dk</p>
+    </div>
+  </div>
+</footer>
+<script>
+/* Workshops: read workshops.json (edited in Pages CMS); #slug opens a workshop */
+(function () {
+  var FALLBACK = [{"title": "Coffee with Your Inner Critic", "slug": "inner-critic", "status": "On request", "tagline": "Meeting the voice that holds you back, with curiosity instead of a fight.", "length": "60 minutes (lunch version) or 2 hours", "language": "English or Danish", "group": "", "price": "", "next": "", "bring": "A notebook and a pen", "intro": "It's not good enough yet. Who do you think you are? Just one more check before you send it.\n\nMost of us know that voice. And most of us have tried to argue with it, ignore it or shout it down. It rarely works.\n\nIn this workshop we sit down with the inner critic over a cup of coffee and get curious about it. What is it trying to do for you? What is it afraid would happen if it stopped?\n\nEven the loud, critical one has a good reason for what it does.", "foryou": ["You know a voice that says it's not good enough yet", "You get in your own way and wonder, \"Why can't I just do it?\"", "You're tired of fighting yourself", "You're curious about parts-work and don't know where to start"], "steps": [{"title": "Landing", "text": "We arrive, with a cup of coffee."}, {"title": "Parts-work in plain words", "text": "What a \"part\" is, and why there are no bad ones."}, {"title": "Meeting your critic", "text": "A short guided exercise with your notebook."}, {"title": "Two questions", "text": "We ask the critic what it's trying to do for you, and what it's afraid of."}, {"title": "Sharing", "text": "In pairs, then in the group, as much or as little as you like."}, {"title": "Closing", "text": "We thank the part, and you take home a card with the questions for the next time it shows up."}]}];
+  var EMAIL = 'Philipp@parts-work.dk';
+  var hub = document.getElementById('hub'), detail = document.getElementById('detail'), list = document.getElementById('list');
+  var items = [];
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function paras(t) { return String(t || '').split(/\n\s*\n/).filter(function (x) { return x.trim(); }).map(function (x) { return '<p>' + esc(x.trim()) + '</p>'; }).join(''); }
+  function nextText(w) { return w.next ? w.next : 'Dates announced soon'; }
+
+  function renderList() {
+    list.innerHTML = items.map(function (w) {
+      return '<a class="wcard" href="#' + esc(w.slug) + '">' +
+        (w.status ? '<span class="pill">' + esc(w.status) + '</span>' : '') +
+        '<h3>' + esc(w.title) + '</h3><p>' + esc(w.tagline) + '</p>' +
+        '<p class="meta">' + [w.length, nextText(w)].filter(Boolean).map(esc).join(' · ') + '</p>' +
+        '<span class="more">Read more &rarr;</span></a>';
+    }).join('') || '<p>New workshops coming soon.</p>';
+  }
+
+  function renderDetail(w) {
+    var rows = [['Length', w.length], ['Format', 'In person, sitting, everyday clothes, no touch'], ['Group size', w.group], ['Language', w.language], ['Bring', w.bring], ['Price', w.price], ['Next session', nextText(w)]]
+      .filter(function (r) { return r[1]; });
+    var mail = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(w.title);
+    detail.innerHTML =
+      '<a class="back" href="#">&larr; All workshops</a>' +
+      '<p class="date">Workshop' + (w.status ? ' · ' + esc(w.status) : '') + '</p>' +
+      '<h1>' + esc(w.title) + '</h1>' +
+      (w.tagline ? '<p class="lead">' + esc(w.tagline) + '</p>' : '') +
+      '<div class="intro-voice">' + paras(w.intro) + '</div>' +
+      (w.foryou && w.foryou.length ? '<h2>This is for you if&hellip;</h2><ul>' + w.foryou.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+      (w.steps && w.steps.length ? '<h2>What happens</h2><ol class="steps">' + w.steps.map(function (s) { return '<li><b>' + esc(s.title) + '.</b> ' + esc(s.text) + '</li>'; }).join('') + '</ol>' : '') +
+      '<p style="margin-top:1.5rem">Everything is an invitation. You decide how much you share. This is not therapy; we stay with everyday patterns, not old wounds.</p>' +
+      '<div class="card"><dl>' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('') + '</dl>' +
+      '<div class="actions"><a class="btn" href="' + mail + '">' + (w.next ? 'Save me a seat' : 'Ask about dates') + '</a>' +
+      '<a class="btn btn-quiet" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent(w.title + ' for our space') + '">Book it for your space</a></div></div>' +
+      '<p>If something comes up that you\'d like to look at more closely, you\'re welcome to <a href="https://cal.com/philippm/coaching20" target="_blank" rel="noopener">book a free 20-minute call</a>.</p>' +
+      '<p class="sign">Philipp</p>';
+    document.title = w.title + ' | parts-work.dk';
+  }
+
+  function route() {
+    var slug = decodeURIComponent(location.hash.slice(1));
+    var w = items.filter(function (x) { return x.slug === slug; })[0];
+    if (w) { renderDetail(w); hub.hidden = true; detail.hidden = false; window.scrollTo(0, 0); }
+    else { hub.hidden = false; detail.hidden = true; document.title = 'Workshops | parts-work.dk'; }
+  }
+
+  function load(data) {
+    items = (data && data.workshops && data.workshops.length ? data.workshops : FALLBACK).filter(function (w) { return w.title && w.slug && !/^\[/.test(w.title); });
+    renderList(); route();
+  }
+  fetch('workshops.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(load).catch(function () { load(null); });
+  window.addEventListener('hashchange', route);
+
+  /* the critic's lines get crossed out one by one */
+  var li = [].slice.call(document.querySelectorAll('.crossed li'));
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { li.forEach(function (l) { l.classList.add('on'); }); }
+  else li.forEach(function (l, i) { setTimeout(function () { l.classList.add('on'); }, 900 + i * 1400); });
+})();
+</script>
+<script>
+(function () {
+  var site = document.querySelector('.site'), btn = site && site.querySelector('.menu-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', function () { var o = site.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });
+  site.querySelectorAll('.navrow a').forEach(function (a) { a.addEventListener('click', function () { site.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }); });
+})();
+</script>
+</body>
+</html>

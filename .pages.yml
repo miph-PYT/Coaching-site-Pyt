@@ -28,3 +28,40 @@ content:
           - { name: cover, label: Cover photo, type: image }
           - { name: excerpt, label: Short intro, type: text }
           - { name: body, label: "Text (leave an empty line between paragraphs)", type: text }
+  - name: workshops
+    label: Workshops
+    type: file
+    path: workshops.json
+    format: json
+    fields:
+      - name: workshops
+        label: Workshops
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: slug, label: "Web address (short, lowercase, dashes, e.g. inner-critic)", type: string, required: true }
+          - name: status
+            label: Status
+            type: select
+            options:
+              values: [Open for sign-up, On request, Coming soon]
+          - { name: tagline, label: "One-line description", type: string }
+          - { name: length, label: "Length (e.g. 2 hours)", type: string }
+          - { name: language, label: Language, type: string }
+          - { name: group, label: "Group size (leave empty to hide)", type: string }
+          - { name: price, label: "Price (leave empty to hide)", type: string }
+          - { name: next, label: "Next date and venue (empty shows 'Dates announced soon')", type: string }
+          - { name: bring, label: "What to bring", type: string }
+          - { name: intro, label: "Intro text (leave an empty line between paragraphs)", type: text }
+          - { name: foryou, label: "This is for you if… (one line each)", type: string, list: true }
+          - name: steps
+            label: What happens (in order)
+            type: object
+            list: true
+            fields:
+              - { name: title, label: Step, type: string }
+              - { name: text, label: Description, type: string }
