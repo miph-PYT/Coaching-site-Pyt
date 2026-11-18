@@ -102,6 +102,10 @@ textarea{min-height:140px;resize:vertical;line-height:1.55}
 .grid2 .full{grid-column:1/-1}
 .field label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:6px}
 .coach input,.coach select,.coach textarea{background:var(--cream)}
+.linkbox{margin-top:18px;padding-top:16px;border-top:1px solid var(--sand)}
+.linkrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.linkrow .btn{padding:11px 20px;font-size:.95rem}
+#cLink{font-size:.88rem;color:var(--muted)}
 @media (max-width:560px){.grid2{grid-template-columns:1fr}}
 
 /* result */
@@ -150,6 +154,19 @@ textarea{min-height:140px;resize:vertical;line-height:1.55}
       <div class="field"><label for="cNum" data-t="cNum"></label><select id="cNum"></select></div>
       <div class="field full"><label for="cNote" data-t="cNote"></label><textarea id="cNote" style="min-height:90px"></textarea></div>
     </div>
+    <div class="linkbox">
+      <div class="grid2" style="margin-top:0">
+        <div class="field"><label for="cLang" data-t="cLang"></label>
+          <select id="cLang"><option value="en">English</option><option value="da">Dansk</option></select></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label for="cLink" data-t="cLinkLbl"></label><input type="text" id="cLink" readonly></div>
+      <div class="linkrow">
+        <button class="btn" type="button" id="cCopy" data-t="cCopy"></button>
+        <button class="btn outline hidden" type="button" id="cShare" data-t="cShare"></button>
+        <a class="btn outline" id="cMail" data-t="cMail"></a>
+        <span class="muted small" id="cLinkStatus" aria-live="polite"></span>
+      </div>
+    </div>
   </details>
 
   <main id="app"></main>
@@ -171,7 +188,11 @@ const T = {
   en:{
     brand:`Coaching with ${CONFIG.coachName}`, back:"Back", next:"Next", finish:"See my next step",
     coachTitle:"Session setup (only you see this)",
-    coachHelp:"Fill this in, then hand over the screen. Your note appears on the client’s result.",
+    coachHelp:"Fill this in, then either hand over the screen or send the client the link below. Your note appears on the client’s result.",
+    cLang:"Client’s language", cLinkLbl:"Link for the client", cCopy:"Copy link", cShare:"Share…", cMail:"Email it", cCopied:"Link copied",
+    cMailSubject:"A few minutes, while it’s fresh", cMailSubjectFb:"Your feedback",
+    cMailBody:(name,url)=>`Hi${name?" "+name:""},\n\nThank you for today. If you have a few minutes, here’s a short reflection:\n${url}\n\nWarmly,\n${CONFIG.coachName}`,
+    cMailBodyFb:(name,url)=>`Hi${name?" "+name:""},\n\nI’d love to hear what our time together was like for you. It only takes a few minutes:\n${url}\n\nWarmly,\n${CONFIG.coachName}`,
     cName:"Client first name", cNum:"Which session was this?", cNote:"Your suggested next step (optional)",
     intake:"Intake session", sess:n=>`Session ${n} of 5`,
     startTitle:"A few minutes, while it’s fresh",
@@ -264,7 +285,11 @@ const T = {
   da:{
     brand:`Coaching med ${CONFIG.coachName}`, back:"Tilbage", next:"Næste", finish:"Se mit næste skridt",
     coachTitle:"Sessionsopsætning (kun du ser dette)",
-    coachHelp:"Udfyld, og giv så skærmen videre. Din note vises på klientens resultat.",
+    coachHelp:"Udfyld, og giv så skærmen videre, eller send klienten linket nedenfor. Din note vises på klientens resultat.",
+    cLang:"Klientens sprog", cLinkLbl:"Link til klienten", cCopy:"Kopiér link", cShare:"Del…", cMail:"Send på mail", cCopied:"Link kopieret",
+    cMailSubject:"Et par minutter, mens det er friskt", cMailSubjectFb:"Din feedback",
+    cMailBody:(name,url)=>`Hej${name?" "+name:""},\n\nTak for i dag. Hvis du har et par minutter, er her en kort refleksion:\n${url}\n\nKærlig hilsen\n${CONFIG.coachName}`,
+    cMailBodyFb:(name,url)=>`Hej${name?" "+name:""},\n\nJeg vil rigtig gerne høre, hvordan vores tid sammen var for dig. Det tager kun et par minutter:\n${url}\n\nKærlig hilsen\n${CONFIG.coachName}`,
     cName:"Klientens fornavn", cNum:"Hvilken session var det?", cNote:"Dit forslag til næste skridt (valgfrit)",
     intake:"Forsamtale", sess:n=>`Session ${n} af 5`,
     startTitle:"Et par minutter, mens det er friskt",
@@ -675,12 +700,46 @@ app.addEventListener("click", async e=>{
   }
   if(a==="again"){ fresh(); if(coachMode) $("#coach").open=true; render(); }
 });
-document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{ lang=b.dataset.lang; applyLang(); render(); }));
+document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{ lang=b.dataset.lang; applyLang(); render(); updateLink(); }));
 ["#cName","#cNote","#cNum"].forEach(id=>{ $(id).addEventListener("input",()=>{ if(step===0) render(); }); $(id).addEventListener("change",()=>{ if(step===0) render(); }); });
+
+/* ---------- client link (coach panel) ---------- */
+function clientLink(){
+  const u = new URL(location.origin + location.pathname);
+  const q = new URLSearchParams();
+  q.set("s", $("#cNum").value || "intake");
+  const n=$("#cName").value.trim(), note=$("#cNote").value.trim();
+  if(n) q.set("name", n);
+  if(note) q.set("note", note);
+  q.set("lang", $("#cLang").value);
+  return u.href + "?" + q.toString();
+}
+function updateLink(){
+  if(!coachMode) return;
+  const url = clientLink(), L = T[$("#cLang").value], fb = $("#cNum").value==="feedback", n=$("#cName").value.trim();
+  $("#cLink").value = url;
+  $("#cMail").href = `mailto:?subject=${encodeURIComponent(fb?L.cMailSubjectFb:L.cMailSubject)}&body=${encodeURIComponent((fb?L.cMailBodyFb:L.cMailBody)(n,url))}`;
+  $("#cLinkStatus").textContent = "";
+}
+$("#cCopy").addEventListener("click", async ()=>{
+  const url=clientLink();
+  try{ await navigator.clipboard.writeText(url); }catch(_){ const i=$("#cLink"); i.select(); document.execCommand && document.execCommand("copy"); }
+  $("#cLinkStatus").textContent = t("cCopied");
+});
+if(navigator.share){
+  $("#cShare").classList.remove("hidden");
+  $("#cShare").addEventListener("click", async ()=>{
+    const L=T[$("#cLang").value], fb=$("#cNum").value==="feedback";
+    try{ await navigator.share({title: fb?L.cMailSubjectFb:L.cMailSubject, url: clientLink()}); }catch(_){}
+  });
+}
+$("#cLink").addEventListener("focus", e=>e.target.select());
+["#cName","#cNote","#cNum","#cLang"].forEach(id=>["input","change"].forEach(ev=>$(id).addEventListener(ev, updateLink)));
 
 /* ---------- boot ---------- */
 if(coachMode) $("#coach").classList.remove("hidden");
 applyLang(); fresh(); render();
+if(coachMode){ $("#cLang").value = lang; updateLink(); }
 </script>
 </body>
 </html>
