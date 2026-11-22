@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet a part of you | parts-work.dk</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="description" content="A 10-minute exercise to try at home: notice a part of you, give it some space, and see what changes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Same palette and type as parts-work.dk */
+  :root {
+    --ground: #1f5f58;
+    --band: #2f7b70;
+    --raised: #2a6e66;
+    --sunk: #1a524c;
+    --lilac: #e8d4f0;
+    --cyan: #e0faff;
+    --soft: #cfeee9;
+    --ink: #1d4f80;
+    --ochre: #d4a33a;
+    --display: "Nunito", "Arial Rounded MT Bold", system-ui, sans-serif;
+    --voice: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --measure: 36rem;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: var(--ground); color: var(--cyan);
+    font-family: var(--body); font-size: 1.0625rem; line-height: 1.7;
+    display: flex; flex-direction: column;
+  }
+  a { color: var(--lilac); }
+  :focus-visible { outline: 2px solid var(--lilac); outline-offset: 3px; border-radius: 4px; }
+  h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
+  p { margin: 0 0 1.1em; }
+  em { color: var(--lilac); font-style: italic; }
+
+  .site { border-bottom: 1px solid rgba(224, 250, 255, 0.12); }
+  .site, main, footer { position: relative; z-index: 1; }
+  .parts-layer { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+  .site .in { width: min(100% - 3rem, var(--measure)); margin-inline: auto; display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 0; gap: 1rem; }
+  .brand { font-family: var(--display); font-weight: 800; font-size: 1.15rem; color: var(--lilac); text-decoration: none; }
+  .progress { font-size: 0.85rem; color: var(--soft); white-space: nowrap; }
+
+  main { flex: 1; width: min(100% - 3rem, var(--measure)); margin-inline: auto; padding: clamp(2.5rem, 7vw, 4.5rem) 0 4rem; }
+
+  h1, h2 { font-family: var(--voice); font-style: italic; font-weight: 600; line-height: 1.15; margin: 0 0 1.4rem; }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.4rem); color: var(--cyan); }
+  h2 { font-size: clamp(2rem, 6vw, 2.7rem); color: var(--lilac); }
+  .kicker { font-family: var(--display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--soft); margin-bottom: 0.8rem; }
+
+  .step { display: none; }
+  .step.on { display: block; animation: rise 0.45s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .step.on { animation: none; } }
+
+  .contrast { margin: 1.6rem 0; padding: 1.2rem 1.4rem; background: var(--sunk); border-radius: 14px; }
+  .contrast p { margin: 0.2rem 0; font-family: var(--voice); font-style: italic; font-size: 1.45rem; line-height: 1.35; }
+  .contrast .from { color: var(--soft); opacity: 0.85; }
+  .contrast .to { color: var(--lilac); }
+  .contrast .arrow { font-family: var(--body); font-style: normal; font-size: 1rem; color: var(--soft); }
+
+  .say { font-family: var(--voice); font-style: italic; font-size: 1.35rem; line-height: 1.4; color: var(--lilac); margin: 1.4rem 0; padding-left: 1rem; border-left: 2px solid var(--lilac); }
+
+  .pause { color: var(--soft); font-size: 0.95rem; }
+
+  /* Choices */
+  .choices { display: grid; gap: 0.8rem; margin: 1.6rem 0; }
+  .choice {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: var(--raised); color: var(--cyan);
+    border: 2px solid transparent; border-radius: 14px;
+    padding: 1rem 1.2rem; font: inherit; line-height: 1.5;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+  .choice:hover { border-color: rgba(232, 212, 240, 0.5); }
+  .choice[aria-pressed="true"] { border-color: var(--lilac); background: var(--sunk); }
+  .choice strong { display: block; font-family: var(--display); font-weight: 800; color: var(--lilac); margin-bottom: 0.15rem; }
+  .choice span { color: var(--soft); font-size: 0.97rem; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1.2rem 0 1.6rem; }
+  .chip {
+    cursor: pointer; font: inherit; font-size: 0.98rem;
+    background: var(--raised); color: var(--cyan);
+    border: 2px solid transparent; border-radius: 999px; padding: 0.45rem 1rem;
+  }
+  .chip:hover { border-color: rgba(232, 212, 240, 0.5); }
+  .chip[aria-pressed="true"] { border-color: var(--lilac); background: var(--sunk); color: var(--lilac); }
+
+  /* Fields */
+  .field { margin: 1.4rem 0; }
+  .field label { display: block; font-weight: 500; margin-bottom: 0.15rem; }
+  .field .hint { display: block; color: var(--soft); font-size: 0.9rem; margin-bottom: 0.45rem; }
+  input[type="text"], input[type="email"], textarea {
+    width: 100%; font: inherit; color: var(--cyan);
+    background: var(--sunk); border: 1px solid rgba(224, 250, 255, 0.22);
+    border-radius: 10px; padding: 0.7rem 0.9rem;
+  }
+  textarea { min-height: 4.2rem; resize: vertical; }
+  input::placeholder, textarea::placeholder { color: rgba(207, 238, 233, 0.5); }
+  input:focus, textarea:focus { outline: none; border-color: var(--lilac); }
+
+  .check { display: flex; gap: 0.7rem; align-items: flex-start; margin: 1.2rem 0; cursor: pointer; }
+  .check input { width: 1.2rem; height: 1.2rem; margin-top: 0.3rem; accent-color: var(--lilac); flex: none; }
+
+  /* Buttons */
+  .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; margin-top: 2.2rem; }
+  .btn {
+    display: inline-block; cursor: pointer;
+    padding: 0.85rem 1.6rem; border-radius: 999px;
+    background: var(--lilac); color: var(--ink);
+    font-family: var(--display); font-weight: 800; font-size: 1rem;
+    text-decoration: none; border: 2px solid var(--lilac);
+    transition: background-color 0.15s, color 0.15s, opacity 0.15s;
+  }
+  .btn:hover { background: var(--cyan); border-color: var(--cyan); }
+  .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+  .btn-quiet { background: transparent; color: var(--lilac); }
+  .btn-quiet:hover { background: var(--lilac); color: var(--ink); }
+  .back { background: none; border: none; color: var(--soft); font: inherit; font-size: 0.95rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0.4rem; }
+
+  .card { background: var(--raised); border-radius: 16px; padding: 1.5rem 1.5rem 1.2rem; margin: 1.6rem 0; }
+  .card h3 { font-family: var(--display); font-weight: 800; color: var(--lilac); font-size: 1.15rem; margin: 0 0 0.6rem; }
+
+  /* The note */
+  .note { background: var(--lilac); color: var(--ink); border-radius: 16px; padding: 1.6rem 1.6rem 1.3rem; margin: 1.6rem 0; }
+  .note .title { font-family: var(--voice); font-style: italic; font-weight: 600; font-size: 1.7rem; margin: 0 0 0.1rem; }
+  .note .date { font-size: 0.88rem; opacity: 0.75; margin-bottom: 1.1rem; }
+  .note dl { margin: 0; }
+  .note dt { font-family: var(--display); font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; margin-top: 0.8rem; }
+  .note dd { margin: 0.1rem 0 0; }
+  .note .sign { margin-top: 1.3rem; font-family: var(--voice); font-style: italic; font-size: 1.2rem; }
+
+  .small { font-size: 0.9rem; color: var(--soft); }
+  .status { margin-top: 1rem; min-height: 1.5em; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  footer { border-top: 1px solid rgba(224, 250, 255, 0.12); }
+  footer .in { width: min(100% - 3rem, var(--measure)); margin-inline: auto; padding: 1.4rem 0 2rem; font-size: 0.85rem; color: var(--soft); }
+  footer p { margin: 0.2rem 0; }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .parts-layer, .site, footer, .step:not(.print-me), .actions, .send-block, .print-hide { display: none !important; }
+    .step.print-me { display: block !important; }
+    main { padding: 0; }
+    .note { border: 1px solid #999; }
+  }
+</style>
+</head>
+<body>
+
+<canvas class="parts-layer" aria-hidden="true"></canvas>
+
+<header class="site">
+  <div class="in">
+    <a class="brand" href="/">Philipp Mitterhofer</a>
+    <span class="progress" id="progress" aria-live="polite"></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 0 · Arrive -->
+  <section class="step" data-step="arrive">
+    <p class="kicker">A 10-minute exercise</p>
+    <h1>Meet a part of you</h1>
+    <p>This takes about 10 minutes. Find a quiet spot where nobody needs you for a while.</p>
+    <p>You'll need either a pen and a piece of paper, or a small object you can hold: a stone, a mug, a key. Anything works.</p>
+    <p>Nothing you write here is saved. At the end, you can email yourself a little note of what you found.</p>
+    <div class="actions">
+      <button class="btn" data-next>I'm ready</button>
+      <button class="back" data-goto="start">Done this before? Skip the intro</button>
+    </div>
+  </section>
+
+  <!-- 1 · Blended -->
+  <section class="step" data-step="blended">
+    <h2>First: what is a part?</h2>
+    <p>You already talk in parts without noticing. <em>Part of me wants to go to the party, part of me wants to stay home.</em></p>
+    <p>Most of the time, though, it doesn't feel like a part of us has a feeling. It feels like we <em>are</em> the feeling.</p>
+    <p>I notice it in myself when someone asks me what I'd like, and my mind goes blank. For a moment, I'm not someone who notices the blank. I <em>am</em> the blank.</p>
+    <p>In parts work, that's called being <strong>blended</strong>. A part has stepped so close that you can't see it anymore. You see the world through its eyes.</p>
+    <div class="actions">
+      <button class="btn" data-next>Okay</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 2 · Unblended -->
+  <section class="step" data-step="unblended">
+    <h2>Now notice the difference</h2>
+    <div class="contrast" aria-label="Example">
+      <p class="from">“I'm furious.”</p>
+      <p class="arrow">and</p>
+      <p class="to">“A part of me is furious.”</p>
+    </div>
+    <p>Read both slowly. The second one leaves a little room. Someone is noticing the fury. That someone is you.</p>
+    <p>Stepping into that room is called <strong>unblending</strong>.</p>
+    <p>It doesn't mean pushing the part away. There are no bad parts. Every part is trying to help you in its own way, even the loud and difficult ones. Unblending just gives you enough space to actually see it.</p>
+    <p>That's what you'll try now, in four small steps: <em>find it, give it a form, make some space, and notice how you feel toward it.</em></p>
+    <div class="actions">
+      <button class="btn" data-next>Let's try</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 3 · Starting point -->
+  <section class="step" data-step="start">
+    <p class="kicker">Find it</p>
+    <h2>Where do you want to start?</h2>
+    <p>Pick something small or medium for this first time. Not the biggest thing in your life.</p>
+    <div class="choices" role="group" aria-label="Starting point">
+      <button class="choice" data-pick="start" data-value="moment" aria-pressed="false">
+        <strong>A moment</strong>
+        <span>A recent moment when you reacted more strongly than you wanted to. Snapping at someone, freezing, saying yes when you meant no.</span>
+      </button>
+      <button class="choice" data-pick="start" data-value="sensation" aria-pressed="false">
+        <strong>A sensation</strong>
+        <span>Something you feel in your body right now. A tightness, a heaviness, a restlessness, a knot.</span>
+      </button>
+    </div>
+    <div class="field" id="startField" hidden>
+      <label for="f-start" id="startLabel">In a few words, what was the moment?</label>
+      <span class="hint">Just enough so you'll recognise it later.</span>
+      <input type="text" id="f-start" maxlength="200" autocomplete="off">
+    </div>
+    <div class="actions">
+      <button class="btn" data-next data-needs="start" disabled>Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 4 · Recognise -->
+  <section class="step" data-step="recognise">
+    <p class="kicker">Find it</p>
+    <h2>Let it be there</h2>
+    <p data-if="moment">Go back into that moment for a few seconds. Where were you? Who was there? What happened just before? Then notice what happens in your body as you remember.</p>
+    <p data-if="sensation">Close your eyes for a moment and bring your attention to the sensation. You don't need to change it. Just let it be there.</p>
+    <p class="pause">Take your time. Come back when you can feel it.</p>
+    <p>Then answer whatever comes first. Don't think too hard. “I don't know” is an answer too.</p>
+    <div class="field">
+      <label for="f-body">Where do you feel it in your body?</label>
+      <input type="text" id="f-body" maxlength="200" autocomplete="off" placeholder="e.g. a tight chest, my jaw, my stomach">
+    </div>
+    <div class="field">
+      <label for="f-says">If it could speak, what would it say?</label>
+      <span class="hint">One sentence is plenty.</span>
+      <input type="text" id="f-says" maxlength="200" autocomplete="off" placeholder="e.g. “Don't make a fool of yourself.”">
+    </div>
+    <div class="field">
+      <label for="f-wants">What do you think it wants for you?</label>
+      <span class="hint">Parts are usually trying to protect us from something.</span>
+      <input type="text" id="f-wants" maxlength="200" autocomplete="off" placeholder="e.g. to keep me from being rejected">
+    </div>
+    <div class="actions">
+      <button class="btn" data-next>Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 5 · Form -->
+  <section class="step" data-step="form">
+    <p class="kicker">Give it a form</p>
+    <h2>Let it come out of you</h2>
+    <p>Right now this part lives inside you. Let's give it something it can live in outside of you for a few minutes.</p>
+    <div class="choices" role="group" aria-label="Form">
+      <button class="choice" data-pick="form" data-value="object" aria-pressed="false">
+        <strong>Pick an object</strong>
+        <span>Look around and pick up something that feels like this part. Don't overthink it. Hold it in your hand for a moment.</span>
+      </button>
+      <button class="choice" data-pick="form" data-value="drawing" aria-pressed="false">
+        <strong>Draw it</strong>
+        <span>A shape, a creature, a scribble, a colour. It doesn't need to look like anything, and nobody will see it.</span>
+      </button>
+    </div>
+    <div id="formFields" hidden>
+      <div class="field">
+        <label for="f-form" id="formLabel">What did you pick?</label>
+        <input type="text" id="f-form" maxlength="200" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-name">Would it like a name?</label>
+        <span class="hint">Optional. Something like “the Guard”, “the Hurry”, “Little Boss”.</span>
+        <input type="text" id="f-name" maxlength="80" autocomplete="off">
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" data-next data-needs="form" disabled>Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 6 · Distance -->
+  <section class="step" data-step="distance">
+    <p class="kicker">Make some space</p>
+    <h2>Put it in front of you</h2>
+    <p>Place <span class="the-form">it</span> on the table or the floor in front of you.</p>
+    <p>Look at it. That's the part. And you are the one looking at it.</p>
+    <p>Now move it a little further away. An arm's length, or to the other side of the table.</p>
+    <p>Take a breath and notice what changes in your body. Does the feeling get louder, quieter, or just different?</p>
+    <p class="pause">If the distance feels like too much, move it back closer. There is no right distance, only the one that works for you right now.</p>
+    <div class="field">
+      <label for="f-distance">What did you notice when you moved it?</label>
+      <input type="text" id="f-distance" maxlength="200" autocomplete="off" placeholder="e.g. my shoulders dropped a bit">
+    </div>
+    <div class="actions">
+      <button class="btn" data-next>Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 7 · Feel toward -->
+  <section class="step" data-step="toward">
+    <p class="kicker">Notice</p>
+    <h2>How do you feel toward it?</h2>
+    <p>Look at <span class="the-form">it</span> again. Not: what does the part feel? But: how do <em>you</em> feel <em>toward</em> it?</p>
+    <p class="pause" id="againNote" hidden>Look again, now that the other part has stepped back a little.</p>
+    <div class="chips" role="group" aria-label="How you feel toward the part">
+      <button class="chip" data-feel="curious" aria-pressed="false">curious</button>
+      <button class="chip" data-feel="calm" aria-pressed="false">calm</button>
+      <button class="chip" data-feel="warm" aria-pressed="false">warm, kind</button>
+      <button class="chip" data-feel="open" aria-pressed="false">open</button>
+      <button class="chip" data-feel="annoyed" aria-pressed="false">annoyed</button>
+      <button class="chip" data-feel="afraid" aria-pressed="false">afraid of it</button>
+      <button class="chip" data-feel="gone" aria-pressed="false">I want it gone</button>
+      <button class="chip" data-feel="impatient" aria-pressed="false">impatient</button>
+      <button class="chip" data-feel="ashamed" aria-pressed="false">ashamed</button>
+      <button class="chip" data-feel="nothing" aria-pressed="false">nothing, numb</button>
+      <button class="chip" data-feel="unsure" aria-pressed="false">I'm not sure</button>
+      <button class="chip" id="ownChip" aria-pressed="false">something else…</button>
+    </div>
+    <div id="ownBox" hidden>
+      <div class="field">
+        <label for="f-own">In your own words, how do you feel toward it?</label>
+        <input type="text" id="f-own" maxlength="80" autocomplete="off">
+      </div>
+      <p style="margin-bottom:0.4rem">Does this feeling have room for the part, or does it have an opinion about it?</p>
+      <div class="chips" role="group" aria-label="What kind of feeling" style="margin-top:0.6rem">
+        <button class="chip" data-own="calm" aria-pressed="false">it has room for it</button>
+        <button class="chip" data-own="other" aria-pressed="false">it has an opinion about it</button>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="towardNext" disabled>Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 7b · Another part -->
+  <section class="step" data-step="another">
+    <p class="kicker">Notice</p>
+    <h2>That's another part</h2>
+    <p id="anotherLead">That makes sense.</p>
+    <p>And here's the interesting thing: that feeling probably belongs to <em>another</em> part. One that has an opinion about the first one. Parts often come in pairs like that, and it's completely normal.</p>
+    <p>Try this:</p>
+    <p class="say">“Thank you. I see you too. Would you be willing to step back a little, just for a few minutes, so I can get to know this one?”</p>
+    <p>If it helps, give this second part an object too, and place it a little to the side.</p>
+    <p class="pause">It might step back, or it might not. Both are fine.</p>
+    <div class="actions">
+      <button class="btn" id="lookAgain">Look again</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 7c · Not yet -->
+  <section class="step" data-step="notyet">
+    <p class="kicker">Notice</p>
+    <h2>Not today, and that's okay</h2>
+    <p>Sometimes a part isn't ready to step back. It usually has good reasons, and it doesn't need to be pushed.</p>
+    <p>And look at what you did: you noticed one part, and then you noticed a second part with an opinion about it. A few minutes ago, you might have just been both of them at once.</p>
+    <p>That noticing is the real skill. It's where all parts work begins.</p>
+    <div class="actions">
+      <button class="btn" data-goto="stop">Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 8 · Aha -->
+  <section class="step" data-step="aha">
+    <p class="kicker">There it is</p>
+    <h2>That's a part of you</h2>
+    <p>That <span id="ahaFeel">curiosity</span> isn't coming from the part. It's coming from you.</p>
+    <p>A little while ago, you <em>were</em> this feeling. Now you're sitting across from it, looking at it, and you can feel something toward it.</p>
+    <p>That's unblending. It's the first move in all parts work, and you just did it on your own.</p>
+    <p>If you like, let the part know you see it. You don't have to say anything clever. Something like:</p>
+    <p class="say">“I see you. Thank you for trying so hard.”</p>
+    <div class="actions">
+      <button class="btn" data-goto="stop">Next</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 9 · Why we stop -->
+  <section class="step" data-step="stop">
+    <p class="kicker">Why we stop here</p>
+    <h2>Enough for one evening</h2>
+    <p>You might feel a pull to keep going. That's the curiosity working!</p>
+    <p>Here's why I'd stop here for now. Parts like this one usually have a job, and often that job is to protect something more tender underneath. Getting to know what it protects is good work. It goes best with someone holding the space with you, at a pace your whole system says yes to. Not alone at the kitchen table.</p>
+    <p>So for now: thank the part for showing up. Put the object back, or keep the drawing somewhere you'll see it.</p>
+    <div class="card">
+      <h3>Want to go further?</h3>
+      <p>That's what a session is for. We start where you are today and only go where you want to go, at your pace.</p>
+      <p style="margin:0"><a class="btn" href="https://www.parts-work.dk/index.html#work" target="_blank" rel="noopener">Book a session</a></p>
+    </div>
+    <div class="actions">
+      <button class="btn btn-quiet" data-next>Get my note</button>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+  <!-- 10 · Note -->
+  <section class="step" data-step="note">
+    <p class="kicker print-hide">Your note</p>
+    <h2 class="print-hide">Something to keep</h2>
+    <p class="print-hide">Here's what you found. Send it to yourself, so you can come back to it.</p>
+
+    <div class="note" id="note"></div>
+
+    <form class="send-block" id="sendForm" novalidate>
+      <div class="field">
+        <label for="f-email">Your email</label>
+        <input type="email" id="f-email" autocomplete="email" required placeholder="you@example.com">
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="f-website">Leave this empty</label>
+        <input type="text" id="f-website" tabindex="-1" autocomplete="off">
+      </div>
+      <label class="check">
+        <input type="checkbox" id="f-consent">
+        <span>Philipp may follow up with me once by email.</span>
+      </label>
+      <p class="small">Your answers are only used to write this email. They aren't saved anywhere. If you tick the box, I keep your email address and the date so I can write to you once, and nothing else. Getting the note doesn't sign you up for anything.</p>
+      <div class="actions">
+        <button class="btn" type="submit" id="sendBtn">Email me my note</button>
+        <button class="back" type="button" id="printBtn">Print instead</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </form>
+
+    <div class="actions print-hide">
+      <a class="btn btn-quiet" href="https://www.parts-work.dk/index.html#work" target="_blank" rel="noopener">Book a session</a>
+      <button class="back" data-back>Back</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="in">
+    <p>Philipp Mitterhofer · <a href="mailto:Philipp@parts-work.dk">Philipp@parts-work.dk</a> · <a href="/">parts-work.dk</a></p>
+    <p>This is a coaching exercise, not therapy. If it brings up more than feels okay, stop, feel your feet on the floor, and come back another time.</p>
+  </div>
+</footer>
+
+<script>
+/* Soft orbs, as on parts-work.dk. They follow the exercise gently:
+   drifting on their own, huddled together while we talk about blending,
+   one drifting a little apart when we make space, breathing together at the end. */
+(function () {
+  var canvas = document.querySelector('.parts-layer');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var COLOURS = ['#e8d4f0', '#46998d', '#e0faff', '#d4a33a', '#dcb2bd', '#5fb3a5'];
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pointer = { x: -9999, y: -9999 };
+  var w, h, small, parts = [], t = 0;
+  var mood = 'drift', k = 0, alpha = 0;
+
+  var MOODS = {
+    arrive: 'drift', blended: 'blend', unblended: 'space',
+    start: 'drift', recognise: 'drift', form: 'drift', distance: 'space',
+    toward: 'drift', another: 'drift', notyet: 'drift',
+    aha: 'breathe', stop: 'breathe', note: 'breathe'
+  };
+
+  function area() {
+    // the open space to the right of the reading column; a narrow strip on phones
+    var col = Math.min(w - 48, 576), right = (w + col) / 2;
+    if (small || w - right < 180) return { x0: w * 0.86, x1: w * 1.04, y0: h * 0.15, y1: h * 0.95 };
+    return { x0: right + 40, x1: w - 30, y0: h * 0.14, y1: h * 0.92 };
+  }
+
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    var a0 = { right: (w + Math.min(w - 48, 576)) / 2 };
+    small = w < 760 || w - a0.right < 180;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function make() {
+    var a = area(), n = 6, scale = small ? 0.34 : Math.min(1, (a.x1 - a.x0) / 320);
+    parts = [];
+    for (var i = 0; i < n; i++) {
+      parts.push({
+        x: a.x0 + Math.random() * (a.x1 - a.x0),
+        y: a.y0 + Math.random() * (a.y1 - a.y0),
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: (30 + Math.random() * 50) * scale,
+        c: COLOURS[i % COLOURS.length],
+        phase: Math.random() * Math.PI * 2,
+        wob: 0.5 + Math.random() * 0.8,
+        orbit: 0.35 + (i / n) * 0.75,
+        angle: (i / n) * Math.PI * 2
+      });
+    }
+  }
+
+  // where each orb would like to be in the current mood
+  function target(p, i, a) {
+    var cx = (a.x0 + a.x1) / 2, cy = (a.y0 + a.y1) / 2;
+    var unit = small ? 40 : 100;
+    if (mood === 'blend') {
+      // huddled on top of each other
+      return [cx + Math.cos(p.angle) * unit * 0.18 * p.orbit, cy + Math.sin(p.angle) * unit * 0.18 * p.orbit];
+    }
+    if (mood === 'space') {
+      // the others stay close; the first (lilac) one drifts a little way off
+      if (i === 0) return [cx + (small ? 0 : unit * 0.35), cy + unit * (small ? 3.2 : 2.1)];
+      return [cx + Math.cos(p.angle) * unit * 0.35 * p.orbit, cy - unit * 0.6 + Math.sin(p.angle) * unit * 0.35 * p.orbit];
+    }
+    // breathe: a loose, shared orbit
+    return [cx + Math.cos(p.angle) * unit * p.orbit, cy + Math.sin(p.angle) * unit * p.orbit * 0.8];
+  }
+
+  function step(dt) {
+    t += dt;
+    var a = area();
+    k += ((mood === 'drift' ? 0 : 1) - k) * Math.min(1, dt * 0.9);
+    alpha += ((small ? 0.28 : 0.5) - alpha) * Math.min(1, dt * 0.8);   // fade in on load
+    var free = 1 - k;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      // wander on their own
+      p.vx += Math.sin(t * 0.3 * p.wob + p.phase) * 0.003 * free;
+      p.vy += Math.cos(t * 0.25 * p.wob + p.phase * 1.3) * 0.003 * free;
+      // a little shy of the cursor
+      var dx = p.x - pointer.x, dy = p.y - pointer.y, d = Math.hypot(dx, dy), reach = p.r + 110;
+      if (d < reach && d > 0) { var f = (1 - d / reach) * 0.1 * free; p.vx += dx / d * f; p.vy += dy / d * f; }
+      // jostle for space while drifting
+      for (var j = 0; j < parts.length; j++) {
+        if (j === i) continue;
+        var q = parts[j], ex = p.x - q.x, ey = p.y - q.y, e = Math.hypot(ex, ey), min = (p.r + q.r) * 0.85;
+        if (e < min && e > 0) { var g = (1 - e / min) * 0.04 * free; p.vx += ex / e * g; p.vy += ey / e * g; }
+      }
+      // stay in the open space
+      if (p.x < a.x0 + p.r * 0.5) p.vx += 0.03 * free;
+      if (p.x > a.x1) p.vx -= 0.03 * free;
+      if (p.y < a.y0) p.vy += 0.02 * free;
+      if (p.y > a.y1) p.vy -= 0.02 * free;
+      p.vx *= 0.985; p.vy *= 0.985;
+      var sp = Math.hypot(p.vx, p.vy); if (sp > 1.6) { p.vx *= 1.6 / sp; p.vy *= 1.6 / sp; }
+      p.x += p.vx * dt * 60; p.y += p.vy * dt * 60;
+      // ease toward the mood's shape, slowly
+      p.angle += dt * 0.1;
+      var tg = target(p, i, a);
+      var ease = Math.min(1, dt * 1.1) * k;
+      p.x += (tg[0] - p.x) * ease; p.y += (tg[1] - p.y) * ease;
+      p.size = 1 + (mood === 'breathe' ? Math.sin(t * 0.55) * 0.07 * k : 0);
+    }
+  }
+
+  function blob(x, y, r, phase, wob) {
+    var n = 9, pts = [];
+    for (var i = 0; i < n; i++) {
+      var an = (i / n) * Math.PI * 2;
+      var rr = r * (1 + 0.07 * Math.sin(t * wob + i * 1.7 + phase) + 0.04 * Math.sin(t * 0.7 + i * 2.9));
+      pts.push([x + Math.cos(an) * rr, y + Math.sin(an) * rr]);
+    }
+    ctx.beginPath();
+    ctx.moveTo((pts[n - 1][0] + pts[0][0]) / 2, (pts[n - 1][1] + pts[0][1]) / 2);
+    for (var m = 0; m < n; m++) {
+      var p = pts[m], q = pts[(m + 1) % n];
+      ctx.quadraticCurveTo(p[0], p[1], (p[0] + q[0]) / 2, (p[1] + q[1]) / 2);
+    }
+    ctx.closePath();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalAlpha = alpha;
+    for (var i = parts.length - 1; i >= 0; i--) {   // the lilac one on top
+      var p = parts[i];
+      ctx.fillStyle = p.c;
+      blob(p.x, p.y, p.r * (p.size || 1), p.phase, p.wob);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  window.partsMood = function (step) { mood = MOODS[step] || 'drift'; };
+
+  resize(); make();
+  if (still) { alpha = small ? 0.28 : 0.5; draw(); return; }
+
+  var last = 0;
+  function frame(now) {
+    var dt = Math.min((now - last) / 1000 || 0, 0.05); last = now;
+    step(dt); draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  window.addEventListener('pointermove', function (e) { pointer.x = e.clientX; pointer.y = e.clientY; }, { passive: true });
+  document.addEventListener('pointerleave', function () { pointer.x = pointer.y = -9999; });
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { var was = small; resize(); if (was !== small) make(); }, 150); });
+})();
+</script>
+<script>
+(function () {
+  // Paste the Google Apps Script web-app URL here. "" = the email button explains that sending isn't set up yet.
+  var ENDPOINT = '';
+
+  var CALM = ['curious', 'calm', 'warm', 'open'];
+  var FEEL_WORDS = { curious: 'curiosity', calm: 'calm', warm: 'warmth', open: 'openness' };
+  var FEEL_LABEL = {
+    curious: 'curious', calm: 'calm', warm: 'warm, kind', open: 'open',
+    annoyed: 'annoyed', afraid: 'afraid of it', gone: 'wanting it gone', impatient: 'impatient',
+    ashamed: 'ashamed', nothing: 'nothing, numb', unsure: 'not sure'
+  };
+
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var byName = {};
+  steps.forEach(function (s, i) { byName[s.dataset.step] = i; });
+  // The main path, used for the progress label (side steps share their parent's number)
+  var MAIN = ['arrive', 'blended', 'unblended', 'start', 'recognise', 'form', 'distance', 'toward', 'stop', 'note'];
+  var PARENT = { another: 'toward', notyet: 'toward', aha: 'toward' };
+
+  var state = { start: null, form: null, feel: null, others: [], loops: 0 };
+  var history = [];
+  var current = 'arrive';
+
+  function $(id) { return document.getElementById(id); }
+  function val(id) { return $(id).value.trim(); }
+
+  function show(name, push) {
+    if (push !== false) history.push(current);
+    current = name;
+    steps.forEach(function (s) { s.classList.toggle('on', s.dataset.step === name); });
+    var main = MAIN.indexOf(PARENT[name] || name);
+    $('progress').textContent = name === 'arrive' ? '' : 'Step ' + main + ' of ' + (MAIN.length - 1);
+    if (name === 'note') buildNote();
+    if (window.partsMood) window.partsMood(name);
+    window.scrollTo(0, 0);
+    var h = steps[byName[name]].querySelector('h1, h2');
+    if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }
+
+  function next() { show(MAIN[MAIN.indexOf(current) + 1]); }
+  function back() { if (history.length) show(history.pop(), false); }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('button, a');
+    if (!t) return;
+    if (t.hasAttribute('data-next')) { e.preventDefault(); next(); }
+    else if (t.hasAttribute('data-back')) { e.preventDefault(); back(); }
+    else if (t.dataset.goto) { e.preventDefault(); show(t.dataset.goto); }
+  });
+
+  // Single-choice cards (starting point, form)
+  document.querySelectorAll('[data-pick]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var key = b.dataset.pick;
+      state[key] = b.dataset.value;
+      document.querySelectorAll('[data-pick="' + key + '"]').forEach(function (o) {
+        o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+      });
+      var nextBtn = document.querySelector('[data-needs="' + key + '"]');
+      if (nextBtn) nextBtn.disabled = false;
+      if (key === 'start') {
+        $('startField').hidden = false;
+        $('startLabel').textContent = state.start === 'moment'
+          ? 'In a few words, what was the moment?'
+          : 'In a few words, what is the sensation?';
+        document.querySelectorAll('[data-if]').forEach(function (p) { p.hidden = p.dataset.if !== state.start; });
+      }
+      if (key === 'form') {
+        $('formFields').hidden = false;
+        $('formLabel').textContent = state.form === 'object' ? 'What did you pick?' : 'What did you draw?';
+        document.querySelectorAll('.the-form').forEach(function (s) {
+          s.textContent = state.form === 'object' ? 'the object' : 'the drawing';
+        });
+      }
+    });
+  });
+
+  // Feeling toward the part
+  var chips = document.querySelectorAll('[data-feel]');
+  var ownKinds = document.querySelectorAll('[data-own]');
+  state.ownKind = null;
+
+  function ownText() { return val('f-own'); }
+  function isCalm() {
+    return CALM.indexOf(state.feel) > -1 || (state.feel === 'own' && state.ownKind === 'calm');
+  }
+  function feelLabel() { return state.feel === 'own' ? ownText() : FEEL_LABEL[state.feel]; }
+  function updateTowardNext() {
+    $('towardNext').disabled = !state.feel || (state.feel === 'own' && !(ownText() && state.ownKind));
+  }
+  function resetOwn() {
+    $('ownChip').setAttribute('aria-pressed', 'false');
+    $('ownBox').hidden = true;
+    $('f-own').value = '';
+    state.ownKind = null;
+    ownKinds.forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+  }
+
+  chips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      state.feel = c.dataset.feel;
+      chips.forEach(function (o) { o.setAttribute('aria-pressed', o === c ? 'true' : 'false'); });
+      resetOwn();
+      updateTowardNext();
+    });
+  });
+
+  $('ownChip').addEventListener('click', function () {
+    state.feel = 'own';
+    chips.forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+    $('ownChip').setAttribute('aria-pressed', 'true');
+    $('ownBox').hidden = false;
+    $('f-own').focus();
+    updateTowardNext();
+  });
+  $('f-own').addEventListener('input', updateTowardNext);
+  ownKinds.forEach(function (k) {
+    k.addEventListener('click', function () {
+      state.ownKind = k.dataset.own;
+      ownKinds.forEach(function (o) { o.setAttribute('aria-pressed', o === k ? 'true' : 'false'); });
+      updateTowardNext();
+    });
+  });
+
+  $('towardNext').addEventListener('click', function () {
+    if (isCalm()) {
+      state.calmLabel = feelLabel();
+      $('ahaFeel').textContent = state.feel === 'own' ? 'feeling of “' + ownText() + '”' : FEEL_WORDS[state.feel];
+      show('aha');
+      return;
+    }
+    state.others.push(feelLabel());
+    state.loops++;
+    if (state.loops > 2) { show('notyet'); return; }
+    var lead = {
+      annoyed: 'Annoyed. That makes sense.',
+      afraid: 'Afraid of it. That makes sense.',
+      gone: 'Wanting it gone. That makes sense.',
+      impatient: 'Impatient. That makes sense.',
+      ashamed: 'Ashamed. That makes sense.',
+      nothing: 'Nothing, or numb. That makes sense too. Numbness is often a part keeping things at a safe distance.',
+      unsure: 'Not sure. That’s an honest answer. Often there’s a part that isn’t quite ready to look yet.'
+    };
+    var own = ownText();
+    $('anotherLead').textContent = lead[state.feel] ||
+      (own ? own.charAt(0).toUpperCase() + own.slice(1).replace(/[.!]+$/, '') + '. That makes sense.' : 'That makes sense.');
+    show('another');
+  });
+
+  $('lookAgain').addEventListener('click', function () {
+    state.feel = null;
+    chips.forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+    resetOwn();
+    $('towardNext').disabled = true;
+    $('againNote').hidden = false;
+    show('toward');
+  });
+
+  // The note
+  function noteData() {
+    var d = new Date();
+    var rows = [];
+    function add(label, v) { if (v) rows.push([label, v]); }
+    add(state.start === 'sensation' ? 'Where it started (a sensation)' : 'Where it started (a moment)', val('f-start'));
+    add('Where I feel it', val('f-body'));
+    add('What it says', val('f-says') ? '“' + val('f-says').replace(/^["“”]+|["“”]+$/g, '') + '”' : '');
+    add('What it wants for me', val('f-wants'));
+    add(state.form === 'drawing' ? 'My drawing of it' : 'The object I picked', val('f-form'));
+    add('When I gave it some space', val('f-distance'));
+    if (state.others.length) {
+      var uniq = state.others.filter(function (x, i, a) { return a.indexOf(x) === i; });
+      add('Another part showed up, feeling', uniq.join(', '));
+    }
+    var calm = state.feel && isCalm();
+    if (calm) add('How I felt toward it', state.calmLabel);
+    return {
+      title: val('f-name') ? 'Meeting ' + val('f-name') : 'A part I met',
+      date: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+      rows: rows,
+      unblended: !!calm
+    };
+  }
+
+  function buildNote() {
+    var n = noteData();
+    var box = $('note');
+    box.textContent = '';
+    var t = document.createElement('p'); t.className = 'title'; t.textContent = n.title; box.appendChild(t);
+    var dt0 = document.createElement('p'); dt0.className = 'date'; dt0.textContent = n.date; box.appendChild(dt0);
+    var dl = document.createElement('dl');
+    n.rows.forEach(function (r) {
+      var dt = document.createElement('dt'); dt.textContent = r[0];
+      var dd = document.createElement('dd'); dd.textContent = r[1];
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    if (!n.rows.length) {
+      var dd = document.createElement('dd'); dd.textContent = 'You met a part of you today, even if you didn’t write anything down.'; dl.appendChild(dd);
+    }
+    box.appendChild(dl);
+    var s = document.createElement('p'); s.className = 'sign';
+    s.textContent = 'Every part of you is trying to help. Thank it for showing up. — Philipp';
+    box.appendChild(s);
+  }
+
+  $('printBtn').addEventListener('click', function () {
+    var sec = steps[byName.note];
+    sec.classList.add('print-me');
+    window.print();
+    sec.classList.remove('print-me');
+  });
+
+  $('sendForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var status = $('status');
+    var email = val('f-email');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      status.textContent = 'That email address doesn’t look quite right.';
+      $('f-email').focus();
+      return;
+    }
+    if (val('f-website')) return; // bots fill the hidden field
+    if (!ENDPOINT) {
+      status.textContent = 'Sending isn’t set up yet. You can print the note for now.';
+      return;
+    }
+    var btn = $('sendBtn');
+    btn.disabled = true;
+    status.textContent = 'Sending…';
+    var n = noteData();
+    var body = JSON.stringify({
+      email: email,
+      consent: $('f-consent').checked,
+      title: n.title, name: val('f-name'), date: n.date, rows: n.rows, unblended: n.unblended
+    });
+    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body })
+      .then(function () {
+        status.textContent = 'Sent. Have a look in your inbox in a minute (and in spam, just in case).';
+        btn.textContent = 'Sent';
+      })
+      .catch(function () {
+        status.textContent = 'Something went wrong. You can print the note instead, or try again later.';
+        btn.disabled = false;
+      });
+  });
+
+  show('arrive', false);
+  // parts-work.dk/try/#start skips the intro (Back still leads to the welcome screen)
+  if (location.hash === '#start') show('start');
+})();
+</script>
+</body>
+</html>
