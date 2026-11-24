@@ -208,9 +208,25 @@
   html.ny-over .ny { display: none; }
   html.ny-over div.ny-banner { display: none; }
   .was { color: var(--soft); font-size: 0.55em; font-weight: 400; margin-left: 0.4rem; text-decoration: line-through; }
-  .ny-banner { background: var(--band); box-shadow: inset 0 0 0 2px var(--lilac); border-radius: 1.2rem; padding: 1.2rem 1.5rem; margin: 3rem 0 0; max-width: var(--measure); }
-  .ny-banner strong { color: var(--lilac); font-weight: 500; display: block; margin-bottom: 0.3rem; }
-  .ny-banner p { margin: 0; color: var(--soft); font-size: 0.95rem; }
+  .ny-bar { display: block; background: var(--lilac); color: var(--ink); text-align: center; text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 0.6rem 1rem; }
+  .ny-bar:hover { text-decoration: underline; }
+  #new-year, #packages { scroll-margin-top: 6rem; }
+  .ny-pill { display: inline-block; background: var(--lilac); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 0.4rem 1rem; border-radius: 999px; margin-bottom: 1.4rem; }
+  .ny-pill:hover { text-decoration: underline; }
+  .ny-banner { background: var(--lilac); color: var(--ink); border-radius: 1.6rem; padding: clamp(1.6rem, 4vw, 2.4rem); margin: 2.5rem 0; display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem 2.5rem; align-items: center; }
+  .ny-banner .ny-kicker { font-weight: 500; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 0.5rem; }
+  .ny-banner h3 { color: var(--ink); font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.1; margin: 0 0 0.8rem; }
+  .ny-banner p { margin: 0; color: var(--ink); }
+  .ny-banner ul { list-style: none; padding: 0; margin: 0 0 1.2rem; }
+  .ny-banner li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(29, 79, 128, 0.2); font-size: 0.95rem; }
+  .ny-banner li span:last-child { text-align: right; white-space: nowrap; }
+  .ny-banner li b { font-weight: 600; white-space: nowrap; }
+  .ny-banner li s { opacity: 0.6; font-weight: 400; margin-right: 0.3rem; }
+  .ny-banner .btn { background: var(--ink); color: var(--lilac); }
+  @media (max-width: 760px) { .ny-banner { grid-template-columns: 1fr; } }
+  .ny-tag { display: inline-block; align-self: flex-start; background: var(--lilac); color: var(--ink); font-weight: 500; font-size: 0.82rem; padding: 0.2rem 0.75rem; border-radius: 999px; margin-bottom: 0.5rem; }
+  .tier-featured .ny-tag { background: var(--cyan); }
+  .price .ny { color: var(--lilac); }
 
   .reflect-note { color: var(--soft); font-size: 0.9rem; margin-top: 1.4rem; }
 
@@ -293,6 +309,8 @@
 </head>
 <body>
 
+<a class="ny-bar ny" href="#new-year">New Year start: save up to 2,000 kr on coaching until 31 January →</a>
+
 <header class="site">
   <div class="wrap">
     <a class="brand" href="#top">Philipp Mitterhofer</a>
@@ -315,6 +333,7 @@
 
 <section class="hero">
   <div class="wrap">
+    <a class="ny-pill ny" href="#new-year">New Year prices until 31 Jan →</a>
     <p class="hero-where">Parts-work coaching in Copenhagen and online</p>
     <h1>I help people stay with <span class="hl">the parts of themselves they usually run from</span>, until they can meet them with <span class="hl">kindness</span>.</h1>
     <p class="lead">I'm curious how far you can go when every part of you is finally on the same journey, and you feel at home in your own company.</p>
@@ -414,6 +433,23 @@
       <a class="btn btn-quiet" href="parts-work.html">Discover what parts-work is</a>
     </div>
 
+    <div class="ny-banner ny" id="new-year">
+      <div>
+        <p class="ny-kicker">New Year offer · until 31 January</p>
+        <h3>Start the year without fighting yourself</h3>
+        <p>All packages and the single session cost less when you book by 31 January and start by mid-February. Not sure yet? The 20-minute intro call is always free.</p>
+      </div>
+      <div>
+        <ul>
+          <li><span>A First Commitment</span><span><s>2,900</s> <b>2,200 kr</b></span></li>
+          <li><span>Three Months With Your Parts</span><span><s>5,600</s> <b>4,500 kr</b></span></li>
+          <li><span>A Full Season Inside</span><span><s>10,500</s> <b>8,500 kr</b></span></li>
+          <li><span>Single session</span><span><s>1,200–1,500</s> <b>1,000–1,250 kr</b></span></li>
+        </ul>
+        <a class="btn" href="#packages">See the packages</a>
+      </div>
+    </div>
+
     <details class="row-offer">
       <summary>
         <span class="dot" aria-hidden="true"></span>
@@ -441,19 +477,15 @@
       </div>
     </details>
 
-    <div class="ny-banner ny">
-      <strong>New Year start: lower prices until 31 January</strong>
-      <p>Start the year by meeting yourself differently. Every package and the single session cost less when you book by 31 January and start by mid-February.</p>
-    </div>
-
     <p class="tiers-intro">Choose the level that fits your time and how deep you want to go. Each step up gives us more time in every session to dive deeper.</p>
 
-    <div class="tiers">
+    <div class="tiers" id="packages">
       <article class="tier">
         <span class="tier-level">Light</span>
         <h3>A First Commitment</h3>
         <p class="tier-sub">A focused start on one thing you want to change.</p>
         <p class="tier-meta">4 weeks, 3 sessions of 60 min</p>
+        <span class="ny-tag ny">New Year price · save 700 kr</span>
         <p class="price"><span class="ny">2,200 kr <s class="was">2,900</s></span><span class="reg">2,900 kr</span></p>
         <p class="price-note"><span class="ny">Incl. VAT, or 2 × 1,100 kr · offer until 31 Jan</span><span class="reg">Incl. VAT, or 2 × 1,450 kr</span></p>
         <ul class="ticks">
@@ -470,6 +502,7 @@
         <h3>Three Months With Your Parts</h3>
         <p class="tier-sub">Enough time to change a pattern and make it stick.</p>
         <p class="tier-meta">3 months, 5 sessions of 75 min</p>
+        <span class="ny-tag ny">New Year price · save 1,100 kr</span>
         <p class="price"><span class="ny">4,500 kr <s class="was">5,600</s></span><span class="reg">5,600 kr</span></p>
         <p class="price-note"><span class="ny">Incl. VAT, or 2 × 2,250 kr · offer until 31 Jan</span><span class="reg">Incl. VAT, or 2 × 2,800 kr</span></p>
         <ul class="ticks">
@@ -486,6 +519,7 @@
         <h3>A Full Season Inside</h3>
         <p class="tier-sub">The deepest work, with support all the way.</p>
         <p class="tier-meta">4 months, 7 sessions of 90 min</p>
+        <span class="ny-tag ny">New Year price · save 2,000 kr</span>
         <p class="price"><span class="ny">8,500 kr <s class="was">10,500</s></span><span class="reg">10,500 kr</span></p>
         <p class="price-note"><span class="ny">Incl. VAT, or in 3 instalments · offer until 31 Jan</span><span class="reg">Incl. VAT, or 3 × 3,500 kr</span></p>
         <ul class="ticks">
@@ -520,6 +554,7 @@
           <p style="margin-top:1.2rem">Come with one thing you'd like to move. You'll leave with more clarity and one concrete next step.</p>
         </div>
         <div class="price-panel">
+          <span class="ny-tag ny">New Year price</span>
           <p class="price"><span class="ny">1,000–1,250 kr <s class="was">1,200–1,500</s></span><span class="reg">1,200–1,500 kr</span></p>
           <p class="price-note">Sliding scale, incl. VAT<span class="ny"> · offer until 31 Jan</span></p>
           <a class="btn" href="https://cal.com/philippm/single-session" target="_blank" rel="noopener">Book this offer</a>
